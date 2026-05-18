@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.moonshot.cn)",
+      "Bash(npx docusaurus *)",
+      "Bash(cp \"E:/Pictures/头像/blog千惠图标-removebg-preview.ico\" \"C:/Users/Legiony/my-notebook/static/img/favicon.ico\")",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 *)"
+    ]
+  }
+}
