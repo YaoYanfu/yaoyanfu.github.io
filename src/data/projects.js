@@ -1,0 +1,58 @@
+const projects = [
+  {
+    id: 'my-notebook',
+    title: 'Yves\' Notebook',
+    description: '基于 Docusaurus 构建的个人知识站点，集成 Live2D 看板娘，支持文档与博客双模块。',
+    tags: ['Docusaurus', 'React', 'Live2D', 'Rspack'],
+    github: 'https://github.com/YaoYanfu',
+    demo: 'https://yvesyao.com',
+    status: 'Active',
+  },
+  {
+    id: 'shallowseek',
+    title: 'XDWe / shallowseek',
+    description: '西电教师增强型 AI 学习系统，基于 RAG 整合课程资源与知识流，支持智能问答与学习辅助。',
+    tags: ['Python', 'RAG', 'LLM', 'FastAPI'],
+    github: 'https://github.com/YaoYanfu/shallowseek',
+    demo: null,
+    status: 'Active',
+  },
+  {
+    id: 'picogk-packaging',
+    title: 'PicoGK Packaging Design',
+    description: '基于 PicoGK 的计算几何三维包装设计项目，探索程序化生成与工程设计的交叉应用。',
+    tags: ['C#', 'PicoGK', 'Computational Design'],
+    github: 'https://github.com/YaoYanfu/PicoGK-Three-dimensional-packaging-design',
+    demo: null,
+    status: 'WIP',
+  },
+  {
+    id: 'math-modeling',
+    title: 'Math Modeling Competition',
+    description: '数学建模校赛项目记录：脚本、数据清洗、可视化、模型构建与方案输出。',
+    tags: ['Python', 'Modeling', 'Visualization'],
+    github: 'https://github.com/YaoYanfu/Mathematical-Modeling-School-Competition',
+    demo: null,
+    status: 'Archived',
+  },
+  {
+    id: 'maibot',
+    title: 'MaiBot',
+    description: 'AI Agent 实验项目，探索对话机器人、工具调用与自主任务执行的结合。',
+    tags: ['Python', 'AI Agent', 'LLM'],
+    github: 'https://github.com/YaoYanfu/MaiBot',
+    demo: null,
+    status: 'WIP',
+  },
+  {
+    id: 'xuezaixidian-signin',
+    title: '学在西电签到工具',
+    description: '超星学习通自动签到脚本，支持位置签到与二维码签到，隐身 HTTP 客户端实现。',
+    tags: ['Node.js', 'Automation', 'Reverse Engineering'],
+    github: 'https://github.com/YaoYanfu/xuezaixidian-signin',
+    demo: null,
+    status: 'Active',
+  },
+];
+
+export default projects;

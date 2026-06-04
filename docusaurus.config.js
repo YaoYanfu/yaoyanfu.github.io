@@ -11,7 +11,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Yves\' Site',
-  tagline: 'I can do all things.',
+  tagline: 'Welcome to my page!',
   favicon: 'img/favicon.png',
 
   future: {
@@ -41,17 +41,14 @@ const config = {
       {
         docs: {
           sidebarPath: './sidebars.js',
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: {
           showReadingTime: true,
+          toc: true,
           feedOptions: {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -64,26 +61,18 @@ const config = {
   ],
 
   themeConfig: {
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/logo.png',
     colorMode: {
       defaultMode: 'dark',
       respectPrefersColorScheme: false,
-      disableSwitch: false,
+      disableSwitch: true,
     },
     navbar: {
-      title: 'Home',
-      logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.png',
-      },
       items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Notebook',
-        },
+        {to: '/', label: 'Home', position: 'left'},
         {to: '/blog', label: 'Blog', position: 'left'},
+        {to: '/project', label: 'Project', position: 'left'},
+        {to: '/dashboard', label: 'Dashboard', position: 'left'},
         {
           href: 'https://github.com/YaoYanfu',
           label: 'GitHub',
@@ -97,8 +86,9 @@ const config = {
         {
           title: 'Nav',
           items: [
-            { label: 'Notebook', to: '/docs/intro' },
             { label: 'Blog', to: '/blog' },
+            { label: 'Project', to: '/project' },
+            { label: 'Dashboard', to: '/dashboard' },
           ],
         },
         {
