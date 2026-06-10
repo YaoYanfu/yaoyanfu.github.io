@@ -1,10 +1,12 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Layout from '@theme/Layout';
+import { useLanguage } from '@site/src/context/LanguageContext';
+import TR from '@site/src/data/translations';
+import { fetchMessages, postMessage, deleteMessage, getFingerprint } from '@site/src/lib/supabase';
 import styles from './dashboard.module.css';
 
 /* ── helpers ── */
 
-const STORAGE_KEY = 'dashboard_messages';
 const MAX_CHARS = 500;
 
 const AUTHOR_COLORS = [
@@ -26,66 +28,47 @@ function relativeTime(dateStr) {
   const now = Date.now();
   const then = new Date(dateStr).getTime();
   const diff = Math.floor((now - then) / 1000);
-  if (diff < 60) return '刚刚';
-  if (diff < 3600) return `${Math.floor(diff / 60)} 分钟前`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)} 小时前`;
-  if (diff < 172800) return '昨天';
-  return new Date(dateStr).toLocaleString('zh-CN', {
-    month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit',
-  });
-}
-
-function loadMessages() {
-  if (typeof window === 'undefined') return [];
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)} h ago`;
+  if (diff < 172800) return 'yesterday';
+  return new Date(dateStr).toLocaleString([], { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
 /* ── Toast ── */
 
 function Toast({ message, visible }) {
-  return (
-    <div className={`${styles.toast} ${visible ? styles.toastShow : ''}`}>
-      {message}
-    </div>
-  );
+  return <div className={`${styles.toast} ${visible ? styles.toastShow : ''}`}>{message}</div>;
 }
 
-/* ── Message component ── */
+/* ── MessageCard ── */
 
-function MessageCard({ msg, onDelete }) {
+function MessageCard({ msg, fingerprint, onDelete }) {
   const [confirming, setConfirming] = useState(false);
+  const isOwn = msg.fingerprint === fingerprint;
 
   return (
     <div className={styles.message}>
       <div className={styles.messageTop}>
         <div className={styles.authorBlock}>
-          <div
-            className={styles.avatar}
-            style={{ background: colorFor(msg.author) }}
-          >
+          <div className={styles.avatar} style={{ background: colorFor(msg.author) }}>
             {initials(msg.author)}
           </div>
           <div className={styles.authorInfo}>
             <span className={styles.messageAuthor}>{msg.author}</span>
-            <span className={styles.messageTime}>{relativeTime(msg.time)}</span>
+            <span className={styles.messageTime}>{relativeTime(msg.created_at)}</span>
           </div>
         </div>
-        <button
-          className={`${styles.deleteBtn} ${confirming ? styles.deleteConfirm : ''}`}
-          onClick={() => {
-            if (confirming) onDelete(msg.id);
-            else setConfirming(true);
-          }}
-          onBlur={() => setConfirming(false)}
-          title={confirming ? '确认删除' : '删除'}
-        >
-          {confirming ? '确认?' : '✕'}
-        </button>
+        {isOwn && (
+          <button
+            className={`${styles.deleteBtn} ${confirming ? styles.deleteConfirm : ''}`}
+            onClick={() => { if (confirming) onDelete(msg.id); else setConfirming(true); }}
+            onBlur={() => setConfirming(false)}
+            title={confirming ? 'Confirm delete' : 'Delete'}
+          >
+            {confirming ? 'Sure?' : '✕'}
+          </button>
+        )}
       </div>
       <p className={styles.messageText}>{msg.text}</p>
     </div>
@@ -95,106 +78,137 @@ function MessageCard({ msg, onDelete }) {
 /* ── Page ── */
 
 export default function Dashboard() {
+  const { lang } = useLanguage();
+
+  const t = useMemo(() => {
+    const dict = TR[lang] || TR.en;
+    return (key, vars) => {
+      let s = dict[key] || key;
+      if (vars) Object.entries(vars).forEach(([k, v]) => { s = s.replace(`{${k}}`, v); });
+      return s;
+    };
+  }, [lang]);
+
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [nickname, setNickname] = useState('');
   const [text, setText] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState({ msg: '', visible: false });
+  const [fingerprint] = useState(() => getFingerprint());
   const textareaRef = useRef(null);
   const toastTimer = useRef(null);
 
+  /* load messages from Supabase on mount */
   useEffect(() => {
-    setMessages(loadMessages());
+    let cancelled = false;
+    fetchMessages()
+      .then(data => { if (!cancelled) { setMessages(data); setLoading(false); } })
+      .catch(err => { if (!cancelled) { setError(err.message); setLoading(false); } });
+    return () => { cancelled = true; };
   }, []);
 
+  /* toast helper */
   const showToast = useCallback((msg) => {
     setToast({ msg, visible: true });
     clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => setToast({ msg, visible: false }), 2200);
   }, []);
 
-  function persist(msgs) {
-    setMessages(msgs);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs));
-  }
-
-  function handleSubmit(e) {
+  /* submit */
+  async function handleSubmit(e) {
     e.preventDefault();
     const trimmedNick = nickname.trim();
     const trimmedText = text.trim();
-    if (!trimmedNick || !trimmedText) return;
+    if (!trimmedNick || !trimmedText || submitting) return;
 
-    const newMsg = {
-      id: Date.now(),
-      author: trimmedNick,
-      text: trimmedText,
-      time: new Date().toISOString(),
-    };
-
-    persist([newMsg, ...messages]);
-    setNickname('');
-    setText('');
-    showToast('留言已发布 ✨');
+    setSubmitting(true);
+    try {
+      const [newMsg] = await postMessage({ author: trimmedNick, text: trimmedText, fingerprint });
+      setMessages(prev => [newMsg, ...prev]);
+      setNickname(''); setText('');
+      showToast(t('dashboard.toast.posted'));
+    } catch (err) {
+      showToast('发送失败，请稍后重试');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
-  function handleDelete(id) {
-    persist(messages.filter((m) => m.id !== id));
-    showToast('留言已删除');
+  /* delete */
+  async function handleDelete(id) {
+    try {
+      await deleteMessage(id);
+      setMessages(prev => prev.filter(m => m.id !== id));
+      showToast(t('dashboard.toast.deleted'));
+    } catch (err) {
+      showToast('删除失败，请稍后重试');
+    }
   }
+
+  /* ── render ── */
 
   return (
-    <Layout title="Dashboard" description="留言板">
+    <Layout title={t('dashboard.title')} description={t('dashboard.subtitle.empty')}>
       <main className={styles.container}>
         <header className={styles.header}>
-          <h1 className={styles.title}>Message Board</h1>
+          <h1 className={styles.title}>{t('dashboard.title')}</h1>
           <p className={styles.subtitle}>
             {messages.length > 0
-              ? `共 ${messages.length} 条留言`
-              : '留个脚印，说点什么吧'}
+              ? t('dashboard.subtitle.count', { count: messages.length })
+              : t('dashboard.subtitle.empty')}
           </p>
         </header>
 
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputRow}>
             <input
-              className={styles.input}
-              type="text"
-              placeholder="你的昵称"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              maxLength={20}
-              autoComplete="off"
+              className={styles.input} type="text"
+              placeholder={t('dashboard.form.nickname')}
+              value={nickname} onChange={e => setNickname(e.target.value)}
+              maxLength={20} autoComplete="off" disabled={submitting}
             />
             <span className={styles.charCount}>{text.length}/{MAX_CHARS}</span>
           </div>
           <textarea
-            ref={textareaRef}
-            className={styles.textarea}
-            placeholder="写下你想说的话..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            maxLength={MAX_CHARS}
-            rows={3}
+            ref={textareaRef} className={styles.textarea}
+            placeholder={t('dashboard.form.text')}
+            value={text} onChange={e => setText(e.target.value)}
+            maxLength={MAX_CHARS} rows={3} disabled={submitting}
           />
           <div className={styles.formFooter}>
-            <span className={styles.hint}>支持纯文本，文明留言 ✦</span>
-            <button className={styles.submitBtn} type="submit" disabled={!nickname.trim() || !text.trim()}>
-              发布留言
+            <span className={styles.hint}>{t('dashboard.form.hint')}</span>
+            <button
+              className={styles.submitBtn} type="submit"
+              disabled={!nickname.trim() || !text.trim() || submitting}
+            >
+              {submitting ? '…' : t('dashboard.form.submit')}
             </button>
           </div>
         </form>
 
         <div className={styles.messageList}>
-          {messages.length === 0 ? (
+          {loading ? (
+            <div className={styles.empty}>
+              <div className={styles.emptyIcon}>◌</div>
+              <p className={styles.emptyText}>加载中...</p>
+            </div>
+          ) : error ? (
+            <div className={styles.empty}>
+              <div className={styles.emptyIcon}>⚠</div>
+              <p className={styles.emptyText}>加载失败</p>
+              <p className={styles.emptyHint}>{error}</p>
+            </div>
+          ) : messages.length === 0 ? (
             <div className={styles.empty}>
               <div className={styles.emptyIcon}>✧</div>
-              <p className={styles.emptyText}>还没有留言，来做第一个！</p>
-              <p className={styles.emptyHint}>
-                输入昵称和想说的话，点击发布即可 ✦
-              </p>
+              <p className={styles.emptyText}>{t('dashboard.empty.title')}</p>
+              <p className={styles.emptyHint}>{t('dashboard.empty.hint')}</p>
             </div>
           ) : (
-            messages.map((m) => (
-              <MessageCard key={m.id} msg={m} onDelete={handleDelete} />
+            messages.map(m => (
+              <MessageCard key={m.id} msg={m} fingerprint={fingerprint} onDelete={handleDelete} />
             ))
           )}
         </div>

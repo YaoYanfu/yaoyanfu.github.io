@@ -10,8 +10,8 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Yves\' Site',
-  tagline: 'Welcome to my page!',
+  title: 'Yves Yao',
+  tagline: 'Writing code, exploring AI, documenting life.',
   favicon: 'img/favicon.png',
 
   future: {
@@ -21,8 +21,8 @@ const config = {
   url: 'https://yvesyao.com',
   baseUrl: '/',
 
-  organizationName: 'facebook',
-  projectName: 'docusaurus',
+  organizationName: 'YaoYanfu',
+  projectName: 'yvesyao.com',
 
   onBrokenLinks: 'throw',
 
@@ -44,7 +44,8 @@ const config = {
         },
         blog: {
           showReadingTime: true,
-          toc: true,
+          blogSidebarCount: 10,
+          blogSidebarTitle: '最近文章',
           feedOptions: {
             type: ['rss', 'atom'],
             xslt: true,
@@ -68,16 +69,16 @@ const config = {
       disableSwitch: true,
     },
     navbar: {
+      title: 'Yves Yao',
+      logo: {
+        alt: 'Yves Yao',
+        src: 'img/logo.png',
+      },
       items: [
         {to: '/', label: 'Home', position: 'left'},
         {to: '/blog', label: 'Blog', position: 'left'},
         {to: '/project', label: 'Project', position: 'left'},
         {to: '/dashboard', label: 'Dashboard', position: 'left'},
-        {
-          href: 'https://github.com/YaoYanfu',
-          label: 'GitHub',
-          position: 'right',
-        },
       ],
     },
     footer: {

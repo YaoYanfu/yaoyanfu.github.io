@@ -1,23 +1,30 @@
+import { useMemo } from 'react';
 import Layout from '@theme/Layout';
+import { useLanguage } from '@site/src/context/LanguageContext';
+import TR from '@site/src/data/translations';
 import projects from '../data/projects';
 import styles from './project.module.css';
 
-function statusLabel(status) {
-  switch (status) {
-    case 'Active': return '活跃';
-    case 'Archived': return '已归档';
-    case 'WIP': return '开发中';
-    default: return status;
-  }
-}
-
 export default function Project() {
+  const { lang } = useLanguage();
+
+  const t = useMemo(() => {
+    const dict = TR[lang] || TR.en;
+    return (key) => dict[key] || key;
+  }, [lang]);
+
+  const statusLabel = useMemo(() => ({
+    Active: t('project.status.active'),
+    WIP: t('project.status.wip'),
+    Archived: t('project.status.archived'),
+  }), [t]);
+
   return (
-    <Layout title="Project" description="个人项目展示">
+    <Layout title={t('project.title')} description={t('project.subtitle')}>
       <main className={styles.container}>
         <header className={styles.header}>
-          <h1 className={styles.title}>Project</h1>
-          <p className={styles.subtitle}>个人项目展示</p>
+          <h1 className={styles.title}>{t('project.title')}</h1>
+          <p className={styles.subtitle}>{t('project.subtitle')}</p>
         </header>
         <div className={styles.grid}>
           {projects.map((p) => (
@@ -30,17 +37,14 @@ export default function Project() {
                     styles.statusWip
                   }`}
                 />
-                {statusLabel(p.status)}
+                {statusLabel[p.status] || p.status}
               </div>
               <h3 className={styles.cardTitle}>{p.title}</h3>
               <p className={styles.cardDesc}>{p.description}</p>
               <div className={styles.tags}>
-                {p.tags.map((t) => (
-                  <span
-                    key={t}
-                    className={t === 'WIP' ? styles.tagWip : styles.tag}
-                  >
-                    {t}
+                {p.tags.map((tag) => (
+                  <span key={tag} className={tag === 'WIP' ? styles.tagWip : styles.tag}>
+                    {tag}
                   </span>
                 ))}
               </div>

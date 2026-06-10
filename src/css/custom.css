@@ -490,21 +490,6 @@ article[itemprop="blogPost"]:hover {
   background: var(--site-surface-soft);
 }
 
-/* --- TOC --- */
-.table-of-contents__link {
-  border-radius: 6px;
-  transition: all 0.15s ease;
-}
-
-.table-of-contents__link:hover {
-  color: var(--site-text-primary);
-}
-
-.table-of-contents__link--active {
-  color: var(--site-text-primary);
-  font-weight: 500;
-}
-
 /* --- Gradient Text Utility --- */
 .text-gradient {
   background: linear-gradient(135deg, var(--site-accent-start) 0%, var(--site-accent-mid) 50%, var(--site-accent-end) 100%);
