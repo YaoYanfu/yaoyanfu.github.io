@@ -218,4 +218,7 @@ export default function Dashboard() {
         </div>
       </main>
 
-      <Toast message={toast.msg
+      <Toast message={toast.msg} visible={toast.visible} />
+    </Layout>
+  );
+}

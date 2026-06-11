@@ -171,4 +171,13 @@ export default function Home() {
               <Link to="/dashboard" className={`${styles.linkCard} anim-fade-up anim-d2`}>
                 <span className={styles.linkCardLabel}>{t('home.recent.dashboard.label')}</span>
                 <strong className={styles.linkCardTitle}>{t('home.recent.dashboard.title')}</strong>
-                <p className={
+                <p className={styles.linkCardDesc}>{t('home.recent.dashboard.desc')}</p>
+              </Link>
+            </div>
+          </section>
+
+        </main>
+      </div>
+    </Layout>
+  );
+}

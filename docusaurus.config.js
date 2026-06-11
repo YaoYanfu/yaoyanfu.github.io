@@ -92,4 +92,38 @@ const config = {
         {to: '/', label: 'Home', position: 'left'},
         {to: '/blog', label: 'Blog', position: 'left'},
         {to: '/project', label: 'Project', position: 'left'},
-    
+        {to: '/dashboard', label: 'Dashboard', position: 'left'},
+        { type: 'custom-languageToggle', position: 'right' },
+      ],
+    },
+    footer: {
+      style: 'dark',
+      links: [
+        {
+          title: 'Nav',
+          items: [
+            { label: 'Blog', to: '/blog' },
+            { label: 'Project', to: '/project' },
+            { label: 'Dashboard', to: '/dashboard' },
+          ],
+        },
+        {
+          title: 'About',
+          items: [
+            {
+              label: 'GitHub',
+              href: 'https://github.com/YaoYanfu',
+            },
+          ],
+        },
+      ],
+      copyright: 'Copyright (c) Yves Yao',
+    },
+    prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
+    },
+  },
+};
+
+export default config;

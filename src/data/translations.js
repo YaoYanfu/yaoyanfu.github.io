@@ -125,4 +125,12 @@ const t = {
     'dashboard.form.hint': '支持纯文本',
     'dashboard.form.submit': '发布留言',
     'dashboard.empty.title': '还没有留言，来做第一个！',
-    'dashboard.empty.hint': '输入昵称和想说
+    'dashboard.empty.hint': '输入昵称和想说的话，点击发布即可',
+    'dashboard.toast.posted': '留言已发布',
+    'dashboard.toast.deleted': '留言已删除',
+    'dashboard.toast.postError': '发送失败，请稍后重试',
+    'dashboard.toast.deleteError': '删除失败，请稍后重试',
+  },
+};
+
+export default t;

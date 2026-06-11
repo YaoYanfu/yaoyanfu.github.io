@@ -24,4 +24,13 @@ export default function live2dPlugin() {
           },
           {
             tagName: 'script',
-            
+            attributes: {
+              src: '/oml2d-init.js',
+              defer: true,
+            },
+          },
+        ],
+      };
+    },
+  };
+}

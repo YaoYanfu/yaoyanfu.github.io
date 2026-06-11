@@ -576,4 +576,30 @@ article[itemprop="blogPost"]:hover {
 
 /* ============================================
    Staggered entrance animations (global)
-   ===========================
+   ============================================ */
+
+.anim-fade-up {
+  opacity: 0;
+  animation: fadeInUpGlobal 0.55s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.anim-d1 { animation-delay: 0.06s; }
+.anim-d2 { animation-delay: 0.14s; }
+.anim-d3 { animation-delay: 0.22s; }
+.anim-d4 { animation-delay: 0.30s; }
+.anim-d5 { animation-delay: 0.38s; }
+
+@keyframes fadeInUpGlobal {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}

@@ -37,4 +37,17 @@ export function useLanguage() {
 }
 
 /**
- * Share
+ * Shared translation hook — use in any component that renders user-facing text.
+ * Returns a t(key, vars?) function that looks up the current language dictionary.
+ */
+export function useTranslation() {
+  const { lang } = useLanguage();
+  return useMemo(() => {
+    const dict = TR[lang] || TR.en;
+    return (key, vars) => {
+      let s = dict[key] || key;
+      if (vars) Object.entries(vars).forEach(([k, v]) => { s = s.replace(`{${k}}`, v); });
+      return s;
+    };
+  }, [lang]);
+}
