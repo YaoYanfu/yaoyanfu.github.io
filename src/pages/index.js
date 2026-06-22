@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { useTranslation } from '@site/src/context/LanguageContext';
@@ -23,7 +23,7 @@ const contacts = [
 
 /* ── Sidebar ── */
 
-function Sidebar({ t, scrolled }) {
+function Sidebar({ t }) {
   const nav = [
     { key: 'nav.about',      href: '#about' },
     { key: 'nav.experience', href: '#experience' },
@@ -36,11 +36,13 @@ function Sidebar({ t, scrolled }) {
   ];
 
   return (
-    <aside className={`${styles.sidebar} ${scrolled ? styles.sidebarScrolled : ''}`}>
+    <aside className={styles.sidebar}>
       <div className={styles.sidebarInner}>
-        <img className={`${styles.avatar} blur-load`} src="/img/avatar.png" alt="Yves Yao"
-          onLoad={e => { e.target.classList.add('blur-loaded'); }}
-          onError={e => { e.target.classList.add('blur-loaded'); }} />
+        <div className={styles.avatarWrap}>
+          <img className={`${styles.avatar} blur-load`} src="/img/avatar.png" alt="Yves Yao"
+            onLoad={e => { e.target.classList.add('blur-loaded'); }}
+            onError={e => { e.target.classList.add('blur-loaded'); }} />
+        </div>
         <h1 className={styles.sidebarName}>Yves Yao</h1>
         <p className={styles.sidebarTagline}>{t('sidebar.tagline')}</p>
         <nav className={styles.sidebarNav}>
@@ -89,14 +91,6 @@ function StatusPanel({ t }) {
 
 export default function Home() {
   const t = useTranslation();
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 72);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   const experience= useMemo(() => {
     const items = [];
@@ -121,7 +115,7 @@ export default function Home() {
   return (
     <Layout title="Yves Yao" description={t('sidebar.tagline')}>
       <div className={styles.wrapper}>
-        <Sidebar t={t} scrolled={scrolled} />
+        <Sidebar t={t} />
 
         <main className={styles.main}>
 

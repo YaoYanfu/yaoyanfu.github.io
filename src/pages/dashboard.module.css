@@ -11,12 +11,12 @@
 }
 
 .title {
+  font-family: var(--ifm-heading-font-family);
   font-size: 2.3rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #4f6ef7, #b37cfc);
-  -webkit-background-clip: text;
+  background: var(--accent-gradient);  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
@@ -27,7 +27,7 @@
   font-weight: 400;
 }
 
-/* ── Form ── */
+/* ── Form (glass — one of the few glass elements) ── */
 .form {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -40,7 +40,7 @@
 }
 
 .form:focus-within {
-  border-color: rgba(79, 110, 247, 0.25);
+  border-color: var(--accent-glow);
 }
 
 .inputRow {
@@ -72,7 +72,7 @@
 }
 
 .input:focus {
-  border-color: rgba(79, 110, 247, 0.45);
+  border-color: var(--accent-soft);
   background: var(--site-surface-hover);
 }
 
@@ -107,7 +107,7 @@
   font-size: 0.9rem;
   font-weight: 600;
   color: #f4f6fb;
-  background: linear-gradient(135deg, #4f6ef7, #7c5cfc);
+  background: var(--accent-gradient);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -116,7 +116,7 @@
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #5d78f8, #8b6efc);
+  background: var(--accent-gradient-hover);
   transform: translateY(-1px);
 }
 
@@ -130,7 +130,7 @@
   cursor: not-allowed;
 }
 
-/* ── Message List ── */
+/* ── Message List (solid cards) ── */
 .messageList {
   display: flex;
   flex-direction: column;
@@ -138,8 +138,8 @@
 }
 
 .message {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 10px;
   padding: 1.25rem 1.35rem;
   animation: messageSlideIn 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);

@@ -10,11 +10,12 @@
 }
 
 .title {
+  font-family: var(--ifm-heading-font-family);
   font-size: 2.5rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   margin-bottom: 0.75rem;
-  background: linear-gradient(135deg, #4f6ef7, #aab8fc);
+  background: var(--accent-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -32,10 +33,11 @@
   gap: 1.5rem;
 }
 
+/* ── Card (solid) ── */
 .card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
   padding: 1.75rem;
   transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1),
               box-shadow 0.25s cubic-bezier(0.25, 0.1, 0.25, 1),
@@ -46,7 +48,7 @@
 .card:hover {
   transform: translateY(-2px);
   border-color: var(--site-border-hover);
-  background: var(--glass-hover);
+  background: var(--card-bg-hover);
   box-shadow: var(--card-shadow-hover);
 }
 
@@ -56,6 +58,7 @@
 }
 
 .cardTitle {
+  font-family: var(--ifm-heading-font-family);
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--site-text-primary);
@@ -81,8 +84,8 @@
   font-weight: 500;
   padding: 3px 10px;
   border-radius: 20px;
-  background: rgba(79, 110, 247, 0.12);
-  color: #7c93f9;
+  background: var(--accent-subtle);
+  color: var(--accent-text);
 }
 
 .tagWip {
@@ -127,7 +130,7 @@
 .link {
   font-size: 0.85rem;
   font-weight: 500;
-  color: #4f6ef7;
+  color: var(--accent-text-light);
   text-decoration: none;
   transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
