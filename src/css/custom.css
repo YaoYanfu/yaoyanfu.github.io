@@ -2,89 +2,86 @@
    Yves' Page — Dual-theme Design System
    ============================================ */
 
-/* ── Shared / Light (default) — soft warm copper on paper ── */
+/* ── Shared / Light (default) — cool neutral, deep crimson accent ── */
 :root {
-  --ifm-color-primary: #c3823e;
-  --ifm-color-primary-dark: #a16a32;
-  --ifm-color-primary-darker: #8c5c2b;
-  --ifm-color-primary-darkest: #704a22;
-  --ifm-color-primary-light: #d19a5e;
-  --ifm-color-primary-lighter: #ddb380;
-  --ifm-color-primary-lightest: #f0d8bb;
+  --ifm-color-primary: #9d3742;
+  --ifm-color-primary-dark: #832d37;
+  --ifm-color-primary-darker: #6f262e;
+  --ifm-color-primary-darkest: #581d24;
+  --ifm-color-primary-light: #b54957;
+  --ifm-color-primary-lighter: #c66573;
+  --ifm-color-primary-lightest: #e3a4ad;
 
   /* Backgrounds */
-  --ifm-background-color: #faf8f5;
-  --ifm-background-surface-color: #ffffff;
-  --ifm-navbar-background-color: rgba(250, 248, 245, 0.86);
-  --ifm-footer-background-color: #f3f0ec;
+  --ifm-background-color: #f1f1ee;
+  --ifm-background-surface-color: #fafaf8;
+  --ifm-navbar-background-color: rgba(241, 241, 238, 0.86);
+  --ifm-footer-background-color: #e8e8e4;
 
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.06);
 
   /* Typography */
-  --ifm-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --ifm-font-family-base: 'Inter', 'Noto Sans SC', 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --ifm-font-weight-normal: 400;
-  --ifm-heading-font-family: 'Source Serif 4', 'Noto Serif SC', 'PingFang SC', Georgia, serif;
+  --ifm-heading-font-family: 'Fraunces', 'Noto Serif SC', 'Source Han Serif SC', Georgia, serif;
   --ifm-heading-font-weight: 600;
-  --ifm-font-color-base: #1c1c1c;
-  --ifm-font-color-secondary: rgba(28, 28, 28, 0.64);
-  --ifm-link-color: #c3823e;
-  --ifm-link-hover-color: #a16a32;
+  --ifm-font-color-base: #1a1a1c;
+  --ifm-font-color-secondary: rgba(26, 26, 28, 0.64);
+  --ifm-link-color: #9d3742;
+  --ifm-link-hover-color: #832d37;
 
   /* Navbar */
-  --ifm-navbar-link-color: rgba(28, 28, 28, 0.64);
-  --ifm-navbar-link-hover-color: #1c1c1c;
+  --ifm-navbar-link-color: rgba(26, 26, 28, 0.64);
+  --ifm-navbar-link-hover-color: #1a1a1c;
 
   /* Sidebar menu */
-  --ifm-menu-color: rgba(28, 28, 28, 0.58);
-  --ifm-menu-color-active: #1c1c1c;
-  --ifm-toc-link-color: rgba(28, 28, 28, 0.55);
-  --ifm-breadcrumb-color-active: #1c1c1c;
+  --ifm-menu-color: rgba(26, 26, 28, 0.58);
+  --ifm-menu-color-active: #1a1a1c;
+  --ifm-toc-link-color: rgba(26, 26, 28, 0.55);
+  --ifm-breadcrumb-color-active: #1a1a1c;
   --ifm-table-border-color: rgba(0, 0, 0, 0.08);
   --ifm-hr-border-color: rgba(0, 0, 0, 0.08);
 
   /* ── Site design tokens ── */
-  --site-bg: #faf8f5;
-  --site-bg-surface: #ffffff;
-  --site-text-primary: #1c1c1c;
-  --site-text-secondary: rgba(28, 28, 28, 0.64);
-  --site-text-muted: rgba(28, 28, 28, 0.38);
+  --site-bg: #f1f1ee;
+  --site-bg-surface: #fafaf8;
+  --site-text-primary: #1a1a1c;
+  --site-text-secondary: rgba(26, 26, 28, 0.64);
+  --site-text-muted: rgba(26, 26, 28, 0.40);
   --site-border-subtle: rgba(0, 0, 0, 0.09);
   --site-border-hover: rgba(0, 0, 0, 0.15);
   --site-surface-soft: rgba(0, 0, 0, 0.04);
   --site-surface-hover: rgba(0, 0, 0, 0.07);
-  --site-accent-start: #c3823e;
-  --site-accent-mid: #d19a5e;
-  --site-accent-end: #ddb380;
+  --site-accent-start: #9d3742;
+  --site-accent-mid: #b54957;
+  --site-accent-end: #c66573;
 
-  /* Accent utilities — soft warm copper */
-  --accent-subtle: rgba(195, 130, 62, 0.08);
-  --accent-soft: rgba(195, 130, 62, 0.14);
-  --accent-glow: rgba(195, 130, 62, 0.15);
-  --accent-glow-strong: rgba(195, 130, 62, 0.25);
-  --accent-text: #c3823e;
-  --accent-text-hover: #a16a32;
-  --accent-text-light: #d19a5e;
-  --accent-gradient: linear-gradient(135deg, #c3823e, #d19a5e);
-  --accent-gradient-hover: linear-gradient(135deg, #d19a5e, #ddb380);
-  --accent-blockquote: linear-gradient(180deg, #c3823e, #ddb380);
+  /* Accent utilities — deep crimson */
+  --accent-subtle: rgba(157, 55, 66, 0.08);
+  --accent-soft: rgba(157, 55, 66, 0.14);
+  --accent-glow: rgba(157, 55, 66, 0.18);
+  --accent-glow-strong: rgba(157, 55, 66, 0.28);
+  --accent-text: #9d3742;
+  --accent-text-hover: #832d37;
+  --accent-text-light: #b54957;
+  --accent-gradient: linear-gradient(135deg, #9d3742, #b54957);
+  --accent-gradient-hover: linear-gradient(135deg, #b54957, #c66573);
+  --accent-blockquote: linear-gradient(180deg, #9d3742, #c66573);
 
   /* Glass card — used sparingly (Status Panel, Dashboard form) */
-  --glass-bg: rgba(255, 255, 255, 0.78);
+  --glass-bg: rgba(255, 255, 255, 0.72);
   --glass-border: rgba(0, 0, 0, 0.08);
-  --glass-hover: rgba(255, 255, 255, 0.94);
+  --glass-hover: rgba(255, 255, 255, 0.90);
 
-  /* Shadows — warm gray, amber accent glow */
+  /* Shadows — neutral gray, crimson accent glow */
   --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  --card-shadow-hover: 0 6px 24px rgba(0, 0, 0, 0.07), 0 2px 8px rgba(195, 130, 62, 0.08);
+  --card-shadow-hover: 0 6px 24px rgba(0, 0, 0, 0.07), 0 2px 8px rgba(157, 55, 66, 0.08);
 
-  /* Card — solid bg (replaced glass on most cards) */
+  /* Card — solid bg */
   --card-bg: rgba(0, 0, 0, 0.02);
   --card-border: rgba(0, 0, 0, 0.08);
   --card-bg-hover: rgba(0, 0, 0, 0.04);
-
-  /* Grid overlay — visible like notebook paper */
-  --grid-color: rgba(0, 0, 0, 0.07);
 
   /* Divider */
   --divider-color: rgba(0, 0, 0, 0.08);
@@ -99,15 +96,15 @@
   navigation: auto;
 }
 
-/* ── Dark theme overrides — blue-purple tech accent ── */
+/* ── Dark theme overrides — same crimson, lighter shade ── */
 [data-theme='dark'] {
-  --ifm-color-primary: #4f6ef7;
-  --ifm-color-primary-dark: #3357f5;
-  --ifm-color-primary-darker: #2249f4;
-  --ifm-color-primary-darkest: #0c31d9;
-  --ifm-color-primary-light: #6b85f9;
-  --ifm-color-primary-lighter: #7c93f9;
-  --ifm-color-primary-lightest: #aab8fc;
+  --ifm-color-primary: #d4636e;
+  --ifm-color-primary-dark: #c64a57;
+  --ifm-color-primary-darker: #b03a47;
+  --ifm-color-primary-darkest: #882d37;
+  --ifm-color-primary-light: #de7e87;
+  --ifm-color-primary-lighter: #e69399;
+  --ifm-color-primary-lightest: #f0bcc0;
 
   --ifm-background-color: #08090c;
   --ifm-background-surface-color: #111318;
@@ -115,42 +112,42 @@
   --ifm-footer-background-color: #08090c;
   --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.06);
 
-  --ifm-font-color-base: #f4f6fb;
-  --ifm-font-color-secondary: rgba(244, 246, 251, 0.72);
-  --ifm-link-color: #6b85f9;
-  --ifm-link-hover-color: #aab8fc;
-  --ifm-navbar-link-color: rgba(244, 246, 251, 0.72);
-  --ifm-navbar-link-hover-color: #f4f6fb;
-  --ifm-menu-color: rgba(244, 246, 251, 0.7);
-  --ifm-menu-color-active: #f4f6fb;
-  --ifm-toc-link-color: rgba(244, 246, 251, 0.62);
-  --ifm-breadcrumb-color-active: #f4f6fb;
+  --ifm-font-color-base: #f4f4f4;
+  --ifm-font-color-secondary: rgba(244, 244, 244, 0.72);
+  --ifm-link-color: #d4636e;
+  --ifm-link-hover-color: #e69399;
+  --ifm-navbar-link-color: rgba(244, 244, 244, 0.72);
+  --ifm-navbar-link-hover-color: #f4f4f4;
+  --ifm-menu-color: rgba(244, 244, 244, 0.7);
+  --ifm-menu-color-active: #f4f4f4;
+  --ifm-toc-link-color: rgba(244, 244, 244, 0.62);
+  --ifm-breadcrumb-color-active: #f4f4f4;
   --ifm-table-border-color: rgba(255, 255, 255, 0.08);
   --ifm-hr-border-color: rgba(255, 255, 255, 0.08);
 
   --site-bg: #08090c;
   --site-bg-surface: #111318;
-  --site-text-primary: #f4f6fb;
-  --site-text-secondary: rgba(244, 246, 251, 0.74);
-  --site-text-muted: rgba(244, 246, 251, 0.48);
+  --site-text-primary: #f4f4f4;
+  --site-text-secondary: rgba(244, 244, 244, 0.74);
+  --site-text-muted: rgba(244, 244, 244, 0.46);
   --site-border-subtle: rgba(255, 255, 255, 0.08);
   --site-border-hover: rgba(255, 255, 255, 0.14);
   --site-surface-soft: rgba(255, 255, 255, 0.045);
   --site-surface-hover: rgba(255, 255, 255, 0.07);
-  --site-accent-start: #4f6ef7;
-  --site-accent-mid: #7c5cfc;
-  --site-accent-end: #b37cfc;
+  --site-accent-start: #d4636e;
+  --site-accent-mid: #de7e87;
+  --site-accent-end: #e69399;
 
-  --accent-subtle: rgba(79, 110, 247, 0.12);
-  --accent-soft: rgba(79, 110, 247, 0.16);
-  --accent-glow: rgba(79, 110, 247, 0.2);
-  --accent-glow-strong: rgba(79, 110, 247, 0.3);
-  --accent-text: #7c93f9;
-  --accent-text-hover: #aab8fc;
-  --accent-text-light: #6b85f9;
-  --accent-gradient: linear-gradient(135deg, #4f6ef7, #7c5cfc);
-  --accent-gradient-hover: linear-gradient(135deg, #6b85f9, #9370fc);
-  --accent-blockquote: linear-gradient(180deg, #4f6ef7, #b37cfc);
+  --accent-subtle: rgba(212, 99, 110, 0.10);
+  --accent-soft: rgba(212, 99, 110, 0.16);
+  --accent-glow: rgba(212, 99, 110, 0.20);
+  --accent-glow-strong: rgba(212, 99, 110, 0.30);
+  --accent-text: #d4636e;
+  --accent-text-hover: #e69399;
+  --accent-text-light: #de7e87;
+  --accent-gradient: linear-gradient(135deg, #d4636e, #de7e87);
+  --accent-gradient-hover: linear-gradient(135deg, #de7e87, #e69399);
+  --accent-blockquote: linear-gradient(180deg, #d4636e, #e69399);
 
   --glass-bg: rgba(255, 255, 255, 0.045);
   --glass-border: rgba(255, 255, 255, 0.09);
@@ -159,8 +156,7 @@
   --card-border: rgba(255, 255, 255, 0.06);
   --card-bg-hover: rgba(255, 255, 255, 0.05);
   --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --card-shadow-hover: 0 18px 48px rgba(0, 0, 0, 0.28), 0 4px 24px rgba(79, 110, 247, 0.12);
-  --grid-color: rgba(255, 255, 255, 0.045);
+  --card-shadow-hover: 0 18px 48px rgba(0, 0, 0, 0.28), 0 4px 24px rgba(212, 99, 110, 0.12);
   --divider-color: rgba(255, 255, 255, 0.06);
 }
 
@@ -175,21 +171,6 @@ body {
   color: var(--site-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* ── Grid notebook paper ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(var(--grid-color) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 70%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 70%);
 }
 
 #__docusaurus {
@@ -573,45 +554,6 @@ article[itemprop="blogPost"]:hover {
   background-clip: text;
 }
 
-/* ── Animations ── */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow-strong); }
-  50% { box-shadow: 0 0 20px 4px var(--accent-subtle); }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.animate-delay-1 { animation-delay: 0.15s; opacity: 0; }
-.animate-delay-2 { animation-delay: 0.3s; opacity: 0; }
-.animate-delay-3 { animation-delay: 0.45s; opacity: 0; }
-.animate-delay-4 { animation-delay: 0.6s; opacity: 0; }
-
 /* ── Staggered entrance animations ── */
 .anim-fade-up {
   opacity: 0;
@@ -632,6 +574,17 @@ article[itemprop="blogPost"]:hover {
 /* ── Live2D ── */
 #oml2d-canvas {
   z-index: 100 !important;
+  background: transparent !important;
+  pointer-events: none;
+}
+
+/* Workaround for oh-my-live2d v0.19.3 rendering issue —
+   some CDN builds of the pixi.js WebGL renderer produce a
+   black canvas when the texture fails to decode in the first
+   frame. Forcing the canvas to recomposite usually fixes it. */
+#oml2d-canvas canvas {
+  background: transparent !important;
+  mix-blend-mode: normal !important;
 }
 
 .oml2d-menu {
@@ -674,13 +627,6 @@ article[itemprop="blogPost"]:hover {
 }
 
 /* ── Click micro-feedback (:active) ── */
-.card:active,
-.projectCard:active,
-.linkCard:active {
-  transform: scale(0.98) !important;
-  transition-duration: 0.08s !important;
-}
-
 .button:active,
 .submitBtn:active,
 .navItem:active {

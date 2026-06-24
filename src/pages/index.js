@@ -121,14 +121,14 @@ export default function Home() {
 
           {/* 1. About */}
           <section className={styles.section} id="about">
-            <h2 className={styles.sectionTitle}>{t('home.about.title')}</h2>
+            <h2 className={styles.sectionTitle} data-marginalia="己">{t('home.about.title')}</h2>
             <p className={styles.bodyText}>{t('home.about.body')}</p>
             <div className={styles.statusWrap}><StatusPanel t={t} /></div>
           </section>
 
           {/* 2. Experience */}
           <section className={styles.section} id="experience">
-            <h2 className={`${styles.sectionTitle} anim-fade-up`}>{t('home.experience.title')}</h2>
+            <h2 className={`${styles.sectionTitle} anim-fade-up`} data-marginalia="历">{t('home.experience.title')}</h2>
             <div className={styles.experienceList}>
               {experience.map((e, i) => (
                 <div className={`${styles.expItem} anim-fade-up anim-d${i + 1}`} key={e.heading}>
@@ -152,7 +152,7 @@ export default function Home() {
 
           {/* 3. Projects */}
           <section className={styles.section} id="projects">
-            <h2 className={`${styles.sectionTitle} anim-fade-up`}>{t('home.projects.title')}</h2>
+            <h2 className={`${styles.sectionTitle} anim-fade-up`} data-marginalia="作">{t('home.projects.title')}</h2>
             <div className={styles.projectList}>
               {projects.map((p, i) => (
                 <article className={`${styles.projectCard} anim-fade-up anim-d${i + 1}`} key={p.name}>
@@ -167,7 +167,7 @@ export default function Home() {
 
           {/* 4. Recent */}
           <section className={styles.section}>
-            <h2 className={`${styles.sectionTitle} anim-fade-up`}>{t('home.recent.title')}</h2>
+            <h2 className={`${styles.sectionTitle} anim-fade-up`} data-marginalia="近">{t('home.recent.title')}</h2>
             <div className={styles.recentGrid}>
               <Link to="/blog" className={`${styles.linkCard} anim-fade-up anim-d1`}>
                 <span className={styles.linkCardLabel}>{t('home.recent.blog.label')}</span>

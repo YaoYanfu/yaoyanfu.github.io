@@ -30,22 +30,22 @@
   padding-bottom: 2rem;
 }
 
-/* Avatar wrap — clips overflow so scale hover stays in bounds */
+/* Avatar wrap — square with subtle rounding */
 .avatarWrap {
   width: 220px;
   height: 220px;
-  border-radius: 50%;
+  border-radius: 4px;
   overflow: hidden;
   margin-bottom: 1.35rem;
   box-shadow: var(--card-shadow);
-  border: 2px solid var(--site-border-subtle);
+  border: 1px solid var(--site-border-subtle);
 }
 
 /* Avatar */
 .avatar {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: 4px;
   object-fit: cover;
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -56,12 +56,14 @@
 
 /* Name & tagline */
 .sidebarName {
-  font-family: var(--ifm-heading-font-family);
-  font-size: 1.85rem;
-  font-weight: 700;
+  font-family: 'Fraunces', 'Noto Serif SC', Georgia, serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 144, 'SOFT' 50, 'wght' 600;
   color: var(--site-text-primary);
   margin: 0 0 0.3rem;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
 }
 
 .sidebarTagline {
@@ -149,6 +151,24 @@
   color: var(--site-text-primary);
   margin: 0 0 1.1rem;
   letter-spacing: -0.01em;
+  position: relative;
+}
+
+/* Vertical Chinese marginalia — hanging in the left margin */
+.sectionTitle[data-marginalia]::before {
+  content: attr(data-marginalia);
+  position: absolute;
+  left: -3.2rem;
+  top: 0.05em;
+  writing-mode: vertical-rl;
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'PingFang SC', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--accent-text);
+  opacity: 0.55;
+  user-select: none;
+  pointer-events: none;
 }
 
 .bodyText {
@@ -317,19 +337,15 @@
   border: 1px solid var(--card-border);
   border-radius: 8px;
   padding: 1.15rem 1.35rem;
-  transition: border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 }
 
-.projectCard:hover {
-  border-color: var(--accent-glow);
-  background: var(--card-bg-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--card-shadow-hover);
+.projectCard:hover .projectName {
+  color: var(--accent-text);
 }
 
-.projectCard:active {
-  transform: scale(0.98) translateY(0);
-  transition-duration: 0.08s;
+.projectCard:hover .projectDesc {
+  color: var(--site-text-primary);
 }
 
 .projectMeta {
@@ -348,6 +364,7 @@
   font-weight: 600;
   color: var(--site-text-primary);
   margin: 0 0 0.35rem;
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .projectDesc {
@@ -355,6 +372,7 @@
   color: var(--site-text-secondary);
   line-height: 1.6;
   margin: 0;
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .viewAll {
@@ -386,20 +404,19 @@
   border-radius: 8px;
   padding: 1.15rem 1.35rem;
   text-decoration: none;
-  transition: border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 }
 
 .linkCard:hover {
-  border-color: var(--accent-glow);
-  background: var(--card-bg-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--card-shadow-hover);
   text-decoration: none;
 }
 
-.linkCard:active {
-  transform: scale(0.98) translateY(0);
-  transition-duration: 0.08s;
+.linkCard:hover .linkCardTitle {
+  color: var(--accent-text);
+}
+
+.linkCard:hover .linkCardDesc {
+  color: var(--site-text-primary);
 }
 
 .linkCardLabel {
@@ -419,6 +436,7 @@
   font-weight: 600;
   color: var(--site-text-primary);
   margin-bottom: 0.25rem;
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .linkCardDesc {
@@ -426,6 +444,7 @@
   color: var(--site-text-muted);
   line-height: 1.55;
   margin: 0;
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ── Responsive ── */
@@ -455,11 +474,13 @@
     width: 100px;
     height: 100px;
     margin-bottom: 1rem;
+    border-radius: 4px;
   }
 
   .sidebarName {
-    font-family: var(--ifm-heading-font-family);
-    font-size: 1.3rem;
+    font-family: 'Fraunces', 'Noto Serif SC', Georgia, serif;
+    font-size: 1.55rem;
+    font-variation-settings: 'opsz' 144, 'SOFT' 50, 'wght' 600;
   }
 
   .sidebarNav {
@@ -480,5 +501,10 @@
 
   .main {
     padding: 2rem 0 3rem;
+  }
+
+  /* Hide marginalia on small screens — no room in the margin */
+  .sectionTitle[data-marginalia]::before {
+    display: none;
   }
 }
