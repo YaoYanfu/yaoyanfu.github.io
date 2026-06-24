@@ -19,7 +19,7 @@ const config = {
   },
 
   url: 'https://yvesyao.com',
-  baseUrl: '/',
+  baseUrl: '/MyWebSite/',
 
   organizationName: 'YaoYanfu',
   projectName: 'MyWebSite',
