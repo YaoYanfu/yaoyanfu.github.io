@@ -41,7 +41,7 @@ const config = {
   headTags: [
     { tagName: 'link', attributes: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
     { tagName: 'link', attributes: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' } },
-    { tagName: 'link', attributes: { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=Fraunces:opsz,wght,SOFT@9..144,400..700,0..100&family=Noto+Sans+SC:wght@400;500;600;700&display=swap' } },
+    { tagName: 'link', attributes: { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Fraunces:opsz,wght,SOFT@9..144,400..700,0..100&family=Noto+Sans+SC:wght@400;500;600;700&display=swap' } },
   ],
 
   i18n: {

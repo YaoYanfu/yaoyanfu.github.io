@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import Link from '@docusaurus/Link';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import { useTranslation } from '@site/src/context/LanguageContext';
 
@@ -23,7 +24,17 @@ const contacts = [
 
 /* ── Sidebar ── */
 
+function ExpIcon({ icon }) {
+  const src = useBaseUrl(icon);
+  return (
+    <img className={`${styles.expIcon} blur-load`} src={src} alt=""
+      onLoad={ev => { ev.target.classList.add('blur-loaded'); }}
+      onError={ev => { ev.target.classList.add('blur-loaded'); }} />
+  );
+}
+
 function Sidebar({ t }) {
+  const avatarUrl = useBaseUrl('img/avatar.png');
   const nav = [
     { key: 'nav.about',      href: '#about' },
     { key: 'nav.experience', href: '#experience' },
@@ -39,7 +50,7 @@ function Sidebar({ t }) {
     <aside className={styles.sidebar}>
       <div className={styles.sidebarInner}>
         <div className={styles.avatarWrap}>
-          <img className={`${styles.avatar} blur-load`} src="/img/avatar.png" alt="Yves Yao"
+          <img className={`${styles.avatar} blur-load`} src={avatarUrl} alt="Yves Yao"
             onLoad={e => { e.target.classList.add('blur-loaded'); }}
             onError={e => { e.target.classList.add('blur-loaded'); }} />
         </div>
@@ -133,9 +144,7 @@ export default function Home() {
               {experience.map((e, i) => (
                 <div className={`${styles.expItem} anim-fade-up anim-d${i + 1}`} key={e.heading}>
                   <div className={styles.expIconBox}>
-                    <img className={`${styles.expIcon} blur-load`} src={e.icon} alt=""
-                      onLoad={ev => { ev.target.classList.add('blur-loaded'); }}
-                      onError={ev => { ev.target.classList.add('blur-loaded'); }} />
+                    <ExpIcon icon={e.icon} />
                   </div>
                   <div className={styles.expContent}>
                     <div className={styles.expHeadRow}>
