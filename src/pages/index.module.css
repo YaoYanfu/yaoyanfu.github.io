@@ -56,14 +56,15 @@
 
 /* Name & tagline */
 .sidebarName {
-  font-family: 'Playfair Display', 'Noto Serif SC', Georgia, serif;
+  font-family: 'Fraunces', 'Noto Serif SC', Georgia, serif;
   font-size: 2.2rem;
   font-weight: 600;
   font-style: italic;
+  font-variation-settings: 'opsz' 144, 'SOFT' 50, 'wght' 600;
   color: var(--site-text-primary);
   margin: 0 0 0.3rem;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
 }
 
 .sidebarTagline {
@@ -478,9 +479,10 @@
   }
 
   .sidebarName {
-    font-family: 'Playfair Display', 'Noto Serif SC', Georgia, serif;
+    font-family: 'Fraunces', 'Noto Serif SC', Georgia, serif;
     font-size: 1.55rem;
     font-style: italic;
+    font-variation-settings: 'opsz' 144, 'SOFT' 50, 'wght' 600;
   }
 
   .sidebarNav {
