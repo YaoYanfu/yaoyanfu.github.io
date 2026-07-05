@@ -18,11 +18,11 @@ const config = {
     v4: true,
   },
 
-  url: 'https://yvesyao.com',
-  baseUrl: '/MyWebSite/',
+  url: 'https://yaoyanfu.github.io',
+  baseUrl: '/',
 
   organizationName: 'YaoYanfu',
-  projectName: 'MyWebSite',
+  projectName: 'yaoyanfu.github.io',
 
   onBrokenLinks: 'throw',
 
