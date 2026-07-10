@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
@@ -22,15 +22,27 @@ const contacts = [
   { label: 'X',       href: 'https://x.com/yao_yves15717',                Icon: IconX },
 ];
 
+/* ── Progressive blur-up image with SSR hydration fix ── */
+
+function BlurImg({ className, src, alt = '' }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (ref.current?.complete) {
+      ref.current.classList.add('blur-loaded');
+    }
+  }, []);
+  return (
+    <img ref={ref} className={`${className} blur-load`} src={src} alt={alt}
+      onLoad={e => { e.target.classList.add('blur-loaded'); }}
+      onError={e => { e.target.classList.add('blur-loaded'); }} />
+  );
+}
+
 /* ── Sidebar ── */
 
 function ExpIcon({ icon }) {
   const src = useBaseUrl(icon);
-  return (
-    <img className={`${styles.expIcon} blur-load`} src={src} alt=""
-      onLoad={ev => { ev.target.classList.add('blur-loaded'); }}
-      onError={ev => { ev.target.classList.add('blur-loaded'); }} />
-  );
+  return <BlurImg className={styles.expIcon} src={src} />;
 }
 
 function Sidebar({ t }) {
@@ -50,9 +62,7 @@ function Sidebar({ t }) {
     <aside className={styles.sidebar}>
       <div className={styles.sidebarInner}>
         <div className={styles.avatarWrap}>
-          <img className={`${styles.avatar} blur-load`} src={avatarUrl} alt="Yves Yao"
-            onLoad={e => { e.target.classList.add('blur-loaded'); }}
-            onError={e => { e.target.classList.add('blur-loaded'); }} />
+          <BlurImg className={styles.avatar} src={avatarUrl} alt="Yves Yao" />
         </div>
         <h1 className={styles.sidebarName}>Yves Yao</h1>
         <p className={styles.sidebarTagline}>{t('sidebar.tagline')}</p>
