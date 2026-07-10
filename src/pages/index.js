@@ -55,7 +55,7 @@ function Sidebar({ t }) {
 
   const linkItems = [
     { key: 'nav.blog',      href: '/blog' },
-    { key: 'nav.dashboard', href: '/dashboard' },
+    // { key: 'nav.dashboard', href: '/dashboard' },
   ];
 
   return (
@@ -193,11 +193,11 @@ export default function Home() {
                 <strong className={styles.linkCardTitle}>{t('home.recent.blog.title')}</strong>
                 <p className={styles.linkCardDesc}>{t('home.recent.blog.desc')}</p>
               </Link>
-              <Link to="/dashboard" className={`${styles.linkCard} anim-fade-up anim-d2`}>
+              {/* <Link to="/dashboard" className={`${styles.linkCard} anim-fade-up anim-d2`}>
                 <span className={styles.linkCardLabel}>{t('home.recent.dashboard.label')}</span>
                 <strong className={styles.linkCardTitle}>{t('home.recent.dashboard.title')}</strong>
                 <p className={styles.linkCardDesc}>{t('home.recent.dashboard.desc')}</p>
-              </Link>
+              </Link> */}
             </div>
           </section>
 

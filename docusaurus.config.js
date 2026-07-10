@@ -88,7 +88,7 @@ const config = {
         {to: '/', label: 'Home', position: 'left'},
         {to: '/blog', label: 'Blog', position: 'left'},
         {to: '/project', label: 'Project', position: 'left'},
-        {to: '/dashboard', label: 'Dashboard', position: 'left'},
+        // {to: '/dashboard', label: 'Dashboard', position: 'left'},
         { type: 'custom-languageToggle', position: 'right' },
       ],
     },
