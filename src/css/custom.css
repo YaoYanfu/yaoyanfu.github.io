@@ -596,6 +596,17 @@ article[itemprop="blogPost"]:hover {
 }
 
 @media (max-width: 768px) {
+  article[itemprop="blogPost"] {
+    padding: 1rem;
+  }
+
+  .markdown table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
   #oml2d-canvas {
     max-width: 120px;
     max-height: 180px;

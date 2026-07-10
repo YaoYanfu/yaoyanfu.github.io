@@ -17,6 +17,7 @@ export default function live2dPlugin() {
             tagName: 'script',
             innerHTML: `
               (function () {
+                if (window.matchMedia('(max-width: 768px)').matches) return;
                 if (window.__OML2D_INITIALIZED__) return;
                 window.__OML2D_INITIALIZED__ = true;
                 var s = document.createElement('script');
@@ -34,7 +35,7 @@ export default function live2dPlugin() {
                       position: [-20, 10],
                     }],
                     dockedPosition: 'right',
-                    mobileDisplay: true,
+                    mobileDisplay: false,
                     menus: { disable: false },
                   });
                 };

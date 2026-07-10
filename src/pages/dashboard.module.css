@@ -314,7 +314,17 @@
 
   .submitBtn {
     width: 100%;
+    min-height: 44px;
     justify-content: center;
+  }
+
+  .input,
+  .deleteBtn {
+    min-height: 44px;
+  }
+
+  .deleteBtn {
+    min-width: 44px;
   }
 
   .message {

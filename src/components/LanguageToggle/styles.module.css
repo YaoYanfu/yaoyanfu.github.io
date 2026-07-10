@@ -37,3 +37,13 @@
 .active:hover {
   color: var(--site-text-primary);
 }
+
+@media (max-width: 768px) {
+  .toggle {
+    height: 44px;
+  }
+
+  .option {
+    min-width: 44px;
+  }
+}

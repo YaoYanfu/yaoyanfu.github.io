@@ -454,47 +454,78 @@
   .wrapper {
     flex-direction: column;
     gap: 0;
-    padding: 0 1rem;
+    padding: 0 clamp(1rem, 4vw, 1.5rem);
   }
 
   .sidebar {
     width: 100%;
     height: auto;
     position: static;
-    padding-top: 2.5rem;
+    padding-top: 1.5rem;
   }
 
   .sidebarInner {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-bottom: 1.5rem;
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    column-gap: 0.9rem;
+    align-items: center;
+    padding-bottom: 1rem;
     border-bottom: 1px solid var(--divider-color);
   }
 
   .avatarWrap {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 1rem;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 72px;
+    height: 72px;
+    margin: 0;
     border-radius: 4px;
   }
 
   .sidebarName {
+    grid-column: 2;
+    align-self: end;
     font-family: 'Fraunces', 'Noto Serif SC', Georgia, serif;
-    font-size: 1.55rem;
+    font-size: 1.45rem;
     font-style: italic;
     font-variation-settings: 'opsz' 144, 'SOFT' 50, 'wght' 600;
+    margin: 0 0 0.15rem;
+  }
+
+  .sidebarTagline {
+    grid-column: 2;
+    align-self: start;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    margin: 0;
   }
 
   .sidebarNav {
+    grid-column: 1 / -1;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 4px;
-    margin: 1rem 0;
+    gap: 6px;
+    width: 100%;
+    margin: 0.75rem 0 0;
+  }
+
+  /* The Docusaurus mobile menu already contains these site links. */
+  .sidebarNav > .navItem:nth-child(-n + 4) {
+    display: none;
   }
 
   .navItem {
-    font-size: 0.82rem;
-    padding: 4px 8px;
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+    padding: 0;
+    font-size: 0;
+    background: var(--site-surface-soft);
+  }
+
+  .navIcon {
+    width: 19px;
+    height: 19px;
   }
 
   .navDivider {
@@ -502,11 +533,44 @@
   }
 
   .main {
-    padding: 2rem 0 3rem;
+    padding: 1.75rem 0 3rem;
+    overflow-wrap: anywhere;
+  }
+
+  .section {
+    margin-bottom: 3rem;
+  }
+
+  .section + .section {
+    padding-top: 3rem;
+  }
+
+  .statusPanel,
+  .projectCard,
+  .linkCard {
+    padding: 1rem;
   }
 
   /* Hide marginalia on small screens — no room in the margin */
   .sectionTitle[data-marginalia]::before {
     display: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .expItem {
+    gap: 0.75rem;
+  }
+
+  .expIconBox,
+  .expIcon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .expHeadRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
   }
 }
