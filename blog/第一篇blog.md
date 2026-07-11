@@ -68,7 +68,7 @@ date: 2026-06-01
 也鼓起勇气添加了之前提到的那位学长的联系方式，学长很大方的给我提了很多建议，感谢selen大佬。
 
 ![selen的指导](/img/blog/selen的指导.png)
-> 在此放一下selen大佬的链接~https://selen-suyue.github.io/）
+> 在此放一下selen大佬的链接~https://selen-suyue.github.io
 > selen在**三大顶刊顶会**ICML，ICCV，ICRA均有论文一作，实力强劲。
 
 不得不提的一件事就是和两位网安院的同学参加了星火杯，做的是web开发，做了一个集成了AI的教学管评平台。
