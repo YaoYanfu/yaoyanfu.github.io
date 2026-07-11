@@ -41,6 +41,7 @@
 @media (max-width: 768px) {
   .toggle {
     height: 44px;
+    margin-right: 48px;
   }
 
   .option {
