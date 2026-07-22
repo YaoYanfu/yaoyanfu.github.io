@@ -2,8 +2,8 @@ const projects = [
   {
     id: 'project-chie',
     title: 'project-chie',
-    description: '构建 AI 伙伴千惠的完整项目，围绕自主意识、长期记忆、持续学习与多平台交互展开，后续将拆分为 chie-core 与 chie-body。',
-    tags: ['Python', 'AI Companion', 'Memory', 'FastAPI'],
+    description: '构建 AI 伙伴千惠的完整项目，围绕自主意识、长期记忆、持续学习、多平台交互与具身智能展开，后续将拆分为 chie-core 与 chie-body。',
+    tags: ['Embodied Intelligence', 'AI Companion', 'Memory', 'FastAPI'],
     github: 'https://github.com/YaoYanfu/MaiBot',
     demo: null,
     status: 'WIP',
@@ -19,7 +19,7 @@ const projects = [
   },
   {
     id: 'picogk-packaging',
-    title: '3D 包装设计平台',
+    title: 'PicoGK-Three-dimensional-packaging-design ',
     description: '基于 PicoGK 的计算几何三维包装设计项目，探索程序化生成与工程设计的交叉应用。',
     tags: ['C#', 'PicoGK', 'Computational Design'],
     github: 'https://github.com/YaoYanfu/PicoGK-Three-dimensional-packaging-design',
@@ -28,7 +28,7 @@ const projects = [
   },
   {
     id: 'math-modeling',
-    title: '数模记录',
+    title: 'Mathematical-Modeling-School-Competition',
     description: '数学建模校赛项目记录：脚本、数据清洗、可视化、模型构建与方案输出。',
     tags: ['Python', 'Modeling', 'Visualization'],
     github: 'https://github.com/YaoYanfu/Mathematical-Modeling-School-Competition',
