@@ -106,125 +106,72 @@ my-notebook/
 
 ---
 
-## 四、Live2D 看板娘实现（完整技术方案）
+## 四、看板娘实现（CHIE 默认 + Live2D 回退）
 
-### 方案选择
+### 当前方案
 
-使用 **oh-my-live2d v0.19.3**，零 npm 依赖，通过 CDN 加载。选择理由：该库内置 Cubism 2/3/4/5 所有版本 SDK，不需要手动下载和配置 SDK 文件；支持免费模型 CDN；React 框架兼容。
-
-### 实现架构
+主页默认使用 **CHIE CSS 分层动画模型**。角色由透明 WebP、React 状态和 CSS 动画组成，不依赖 Cubism SDK、WebGL 或外部模型 CDN。原有 oh-my-live2d 代码保留为手动回退方案，但默认构建不会注入或下载它。
 
 ```
-浏览器打开页面
+浏览器打开主页
     │
-    ├─ <script defer src="jsdelivr/oh-my-live2d">   ← live2d-plugin index.js 注入
-    │       ↓ 加载完成后暴露 window.OML2D 全局对象
+    ├─ 读取 customFields.mascotMode
     │
-    └─ <script defer src="/oml2d-init.js">           ← live2d-plugin index.js 注入
-            ↓ 轮询检测 OML2D 就绪，然后调用 OML2D.loadOml2d()
-            ↓ 创建 Canvas 元素插入 body，z-index 100
-            ↓ WebGL 渲染 Live2D 模型
+    ├─ chie（默认）
+    │    └─ HomeChieMascot
+    │         ├─ 按视口选择：全身 / 头像 / 隐藏
+    │         ├─ 首次只加载 idle 或头像 WebP
+    │         ├─ 空闲时预载表情与眨眼素材
+    │         └─ CSS 实现站立、呼吸、发丝和指针响应
+    │
+    ├─ live2d
+    │    └─ live2d-plugin 动态加载 oh-my-live2d
+    │
+    └─ off
+         └─ 不加载任何看板娘
 ```
 
 ### 文件清单
 
-#### 1. plugins/live2d-plugin/index.js（Docusaurus 插件）
+- `src/components/HomeChieMascot/`：主页生产组件与明暗主题样式。
+- `src/data/chieMascot.js`：中英文对白、无障碍文案、素材名和交互映射。
+- `static/img/chie/`：透明 WebP 立绘、表情、眨眼和头像。
+- `src/components/ChieMascot/`：仅供内部预览页使用的调试组件。
+- `src/pages/chie-preview.js`：未加入导航、带 `noindex,nofollow` 的预览页。
+- `plugins/live2d-plugin/index.js`：仅在 `MASCOT_MODE=live2d` 时注册的旧方案。
 
-通过 `injectHtmlTags()` 生命周期钩子，在每个页面的 `<head>` 末尾注入两个 `<script defer>` 标签。插件不包含任何运行时逻辑，只负责资源注入。
+### 响应式与加载规则
 
-```js
-export default function live2dPlugin() {
-  return {
-    name: 'live2d-plugin',
-    injectHtmlTags() {
-      return {
-        headTags: [
-          {
-            tagName: 'script',
-            attributes: {
-              src: 'https://cdn.jsdelivr.net/npm/oh-my-live2d@0.19.3/dist/index.min.js',
-              defer: true,
-            },
-          },
-          {
-            tagName: 'script',
-            attributes: {
-              src: '/oml2d-init.js',
-              defer: true,
-            },
-          },
-        ],
-      };
-    },
-  };
-}
+| CSS 视口宽度 | 展示 | 初始角色资源 |
+| --- | --- | --- |
+| `>= 1366px` | 右下角全身模型 | `chie-teen-idle.webp` |
+| `1024–1365px` | 48px 头像按钮 | `chie-teen-avatar.webp` |
+| `<= 1023px` | 完全隐藏 | 不请求角色图片 |
+
+全身模式在浏览器空闲时再预载 annoyed、shy、alert 和 blink。滚动超过一屏、页脚进入视口或右侧空间不足时自动收起；用户在普通滚动态手动展开后，本次挂载不再自动收起。收起状态与首次问候只写入 `sessionStorage`，不会跨浏览器会话保留。
+
+### 模式切换
+
+`docusaurus.config.js` 读取 `MASCOT_MODE`，可选值为 `chie`、`live2d` 和 `off`，未设置时使用 `chie`。
+
+```powershell
+# 默认 CHIE
+npm run build
+
+# 临时切回旧 Live2D
+$env:MASCOT_MODE = 'live2d'
+npm run build
+
+# 完全关闭看板娘
+$env:MASCOT_MODE = 'off'
+npm run build
 ```
 
-**为什么用插件而非 headTags 配置？** Docusaurus 3.10 使用的是 jiti 模块加载器，在 `docusaurus.config.js` 顶层声明 `headTags` 数组时（包含对象字面量 + `defer: true`），jiti 的解析器偶发 ParseError（Unexpected token）。封装为插件后，`injectHtmlTags()` 返回的对象由 Docusaurus 内部其他机制处理，绕过了 jiti 的语法敏感问题。
+### Live2D 回退方案
 
-#### 2. static/oml2d-init.js（初始化脚本）
+回退插件使用 `injectHtmlTags()` 注入一段内联初始化脚本。脚本在桌面端动态创建 oh-my-live2d v0.19.3 的 CDN `<script>`，加载成功后调用 `window.OML2D.loadOml2d()`；失败时只记录警告。模型仍是托管于 jsDelivr 的 Senko-san。
 
-独立脚本文件，放在 `static/` 目录下，构建后可通过 `/oml2d-init.js` 访问。核心逻辑：
-
-```js
-(function () {
-  'use strict';
-  if (window.__OML2D_INITIALIZED__) return;  // 防重复
-  window.__OML2D_INITIALIZED__ = true;
-
-  function waitForOML2D(retries) {
-    if (window.OML2D) {
-      window.OML2D.loadOml2d({
-        models: [{
-          path: 'https://cdn.jsdelivr.net/gh/Eikanya/Live2d-model/Live2D/Senko_Normals/senko.model3.json',
-          scale: 0.09,
-          position: [-20, 10],
-        }],
-        dockedPosition: 'right',
-        mobileDisplay: true,
-        menus: { disable: false },
-      });
-      return;
-    }
-    if (retries < 30) setTimeout(() => waitForOML2D(retries + 1), 500);
-    else console.warn('[Live2D] Timeout');
-  }
-  waitForOML2D();
-})();
-```
-
-设计要点：
-- **轮询机制**: `defer` 保证 CDN 脚本比当前脚本先下载，但不保证先执行完毕。轮询 `window.OML2D`（最多 15 秒）确保初始化在库就绪后执行。
-- **防重复**: `window.__OML2D_INITIALIZED__` 标记防止 SPA 路由切换时重复创建 Canvas。
-- **右下角定位**: `dockedPosition: 'right'`。
-- **右键菜单**: 启用（`disable: false`），用户可右键点击角色弹出菜单。
-
-#### 3. src/css/custom.css 中的追加规则
-
-```css
-/* 确保看板娘在正常内容之上，但在导航下拉菜单之下 */
-#oml2d-canvas { z-index: 100 !important; }
-.oml2d-menu { z-index: 200 !important; }
-.oml2d-tips { z-index: 150 !important; }
-
-@media (max-width: 768px) {
-  #oml2d-canvas { max-width: 120px; max-height: 180px; }
-}
-```
-
-### 模型
-
-当前使用 Senko-san（仙狐さん），托管在 GitHub CDN (`jsdelivr.net/gh/Eikanya/Live2d-model`)，Cubism 5 格式（`.model3.json`）。
-
-### 更换模型
-
-只需修改 `static/oml2d-init.js` 中 `models[0].path` 和 `models[0].scale`。模型需提供 `.model3.json` 或 `.model.json` 入口文件。可选提供方：
-- 放在 `static/` 目录下（通过 `/model-name/xxx.model3.json` 访问）
-- 其他 CDN URL（jsdelivr、自建 CDN 等）
-
-### 技术原理链
-
-oh-my-live2d → 内置 Cubism Core（live2dcubismcore.min.js）→ 加载 `.moc3` 二进制模型数据 → 加载 `.physics3.json` 物理参数（头发/衣服摆动） → 加载 `.motion3.json` 动作文件 → 每帧更新物理模拟和姿势参数 → WebGL 渲染到 Canvas → CSS `position: fixed; right: 0; bottom: 0`
+因此，默认 `chie` 与 `off` 构建中不会出现 oh-my-live2d CDN 请求。若未来改为 Cubism 自制模型，只需在 `live2d-plugin` 中替换模型入口和缩放参数，再以 `MASCOT_MODE=live2d` 验证，不影响当前 CHIE 上线版本。
 
 ---
 

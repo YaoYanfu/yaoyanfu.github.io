@@ -1,8 +1,10 @@
 import { useMemo, useRef, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import { useTranslation } from '@site/src/context/LanguageContext';
+import HomeChieMascot from '@site/src/components/HomeChieMascot';
 
 import styles from './index.module.css';
 
@@ -112,6 +114,8 @@ function StatusPanel({ t }) {
 
 export default function Home() {
   const t = useTranslation();
+  const {siteConfig} = useDocusaurusContext();
+  const showChie = siteConfig.customFields?.mascotMode === 'chie';
 
   const experience= useMemo(() => {
     const items = [];
@@ -135,10 +139,17 @@ export default function Home() {
 
   return (
     <Layout title="Yves Yao" description={t('sidebar.tagline')}>
-      <div className={styles.wrapper}>
+      <div
+        className={`${styles.wrapper}${
+          showChie ? ` ${styles.wrapperWithMascot}` : ''
+        }`}
+      >
         <Sidebar t={t} />
 
-        <main className={styles.main}>
+        <main
+          className={styles.main}
+          data-chie-safe-content={showChie ? 'true' : undefined}
+        >
 
           {/* 1. About */}
           <section className={styles.section} id="about">
@@ -203,6 +214,7 @@ export default function Home() {
 
         </main>
       </div>
+      {showChie && <HomeChieMascot />}
     </Layout>
   );
 }

@@ -8,6 +8,11 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+const mascotModes = new Set(['chie', 'live2d', 'off']);
+const mascotMode = mascotModes.has(process.env.MASCOT_MODE)
+  ? process.env.MASCOT_MODE
+  : 'chie';
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Yves Yao',
@@ -26,8 +31,12 @@ const config = {
 
   onBrokenLinks: 'throw',
 
+  customFields: {
+    mascotMode,
+  },
+
   plugins: [
-    './plugins/live2d-plugin',
+    mascotMode === 'live2d' ? './plugins/live2d-plugin' : null,
     [
       '@docusaurus/plugin-ideal-image',
       { quality: 80, max: 1440, steps: 3, disableInDev: true },
@@ -36,7 +45,7 @@ const config = {
       '@easyops-cn/docusaurus-search-local',
       { indexDocs: false, indexBlog: true, indexPages: true, language: ['en', 'zh'], hashed: true },
     ],
-  ],
+  ].filter(Boolean),
 
   headTags: [
     { tagName: 'link', attributes: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },

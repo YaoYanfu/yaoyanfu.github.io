@@ -10,6 +10,17 @@
   min-height: 100vh;
 }
 
+@media screen and (min-width: 1366px) {
+  .wrapperWithMascot {
+    /*
+     * Reserve a quiet right rail for CHIE while preserving the homepage's
+     * existing centering curve. The rail reaches the full 1200px width again
+     * once the viewport has enough room.
+     */
+    max-width: min(1200px, calc(50vw + 410px));
+  }
+}
+
 /* ── Left Sidebar ── */
 
 .sidebar {

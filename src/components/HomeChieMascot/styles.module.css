@@ -1,0 +1,580 @@
+.dock {
+  --chie-widget-height: clamp(360px, 48vh, 480px);
+  --chie-look-rotate: 0deg;
+  --chie-floor-glint-x: 50%;
+  --chie-panel: rgba(250, 250, 248, 0.94);
+  --chie-panel-border: rgba(26, 26, 28, 0.13);
+  --chie-panel-shadow: rgba(26, 21, 28, 0.16);
+  --chie-orbit: rgba(157, 55, 66, 0.34);
+
+  position: fixed;
+  z-index: 90;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(0px, env(safe-area-inset-bottom));
+  width: 240px;
+  height: var(--chie-widget-height);
+  pointer-events: none;
+  isolation: isolate;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 300ms ease,
+    transform 460ms cubic-bezier(0.2, 0.75, 0.24, 1);
+}
+
+.dock[data-entered='true'] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dock[data-compact='true'] {
+  height: 48px;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  transform: translateY(7px) scale(0.96);
+  transform-origin: 100% 100%;
+}
+
+.dock[data-compact='true'][data-entered='true'] {
+  transform: translateY(0) scale(1);
+}
+
+.model {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  aspect-ratio: 867 / 1815;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  transform: translateZ(0);
+}
+
+.lookLayer,
+.breathLayer,
+.sprite,
+.hitZones {
+  position: absolute;
+  inset: 0;
+}
+
+.lookLayer {
+  z-index: 2;
+  transform: rotate(var(--chie-look-rotate));
+  transform-origin: 50% 94.75%;
+  transition: transform 300ms cubic-bezier(0.2, 0.75, 0.24, 1);
+  will-change: transform;
+}
+
+.breathLayer {
+  transform-origin: 50% 94.75%;
+  animation: chie-breathe 4.8s ease-in-out infinite;
+}
+
+.sprite {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.baseSprite {
+  z-index: 2;
+  filter:
+    drop-shadow(0 9px 8px rgba(47, 34, 52, 0.13))
+    drop-shadow(0 2px 2px rgba(47, 34, 52, 0.16));
+}
+
+.expressionLayer {
+  z-index: 3;
+  clip-path: ellipse(12.5% 6.2% at 50.8% 14.3%);
+  opacity: 0;
+}
+
+.expressionLayerActive {
+  opacity: 1;
+}
+
+.blinkLayer {
+  z-index: 5;
+}
+
+.hairLayer {
+  z-index: 4;
+  clip-path: polygon(20% 0, 80% 0, 78% 24%, 21% 24%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 12.8% 6.5% at 50.8% 14.3%,
+    transparent 0 93%,
+    #000 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 12.8% 6.5% at 50.8% 14.3%,
+    transparent 0 93%,
+    #000 100%
+  );
+  opacity: 0.34;
+  transform-origin: 51% 7%;
+  animation: chie-hair-lag 5.6s ease-in-out infinite;
+}
+
+.shirtLayer {
+  z-index: 3;
+  clip-path: polygon(16% 19.5%, 83% 19.5%, 77% 49%, 22% 49%);
+  opacity: 0.17;
+  transform-origin: 50% 29%;
+  animation: chie-cloth-lag 4.8s ease-in-out infinite;
+}
+
+.ambientGlow {
+  position: absolute;
+  z-index: 0;
+  inset: 8% 4% 16%;
+  border-radius: 48%;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(199, 153, 205, 0.06), transparent 38%),
+    radial-gradient(circle at 50% 62%, rgba(157, 55, 66, 0.025), transparent 52%);
+  filter: blur(16px);
+  opacity: 0.2;
+}
+
+.glassPlatform {
+  position: absolute;
+  z-index: 1;
+  left: 20%;
+  top: 92.25%;
+  width: 64%;
+  height: 5.4%;
+  border: 1px solid rgba(122, 80, 132, 0.34);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      ellipse at var(--chie-floor-glint-x) 18%,
+      rgba(255, 255, 255, 0.52),
+      rgba(157, 112, 176, 0.13) 44%,
+      rgba(91, 65, 113, 0.025) 72%
+    );
+  box-shadow:
+    0 9px 16px rgba(43, 30, 49, 0.14),
+    0 0 14px rgba(157, 55, 66, 0.05),
+    inset 0 1px rgba(255, 255, 255, 0.48);
+}
+
+.glassPlatform::before {
+  content: '';
+  position: absolute;
+  inset: 12% 7% 47%;
+  border-top: 1px solid rgba(255, 255, 255, 0.64);
+  border-radius: 50%;
+}
+
+.contactShadow {
+  position: absolute;
+  z-index: 1;
+  border-radius: 50%;
+  background: rgba(40, 27, 43, 0.38);
+  filter: blur(2px);
+}
+
+.rearFootShadow {
+  left: 33.5%;
+  top: 94.45%;
+  width: 13.2%;
+  height: 0.86%;
+  transform: rotate(1deg);
+}
+
+.frontFootShadow {
+  left: 52.7%;
+  top: 94.45%;
+  width: 10.2%;
+  height: 0.86%;
+  transform: rotate(-1deg);
+}
+
+.hitZones {
+  z-index: 8;
+  pointer-events: none;
+}
+
+.hitZone {
+  position: absolute;
+  appearance: none;
+  padding: 0;
+  border: 0;
+  border-radius: 42%;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.hitZone:disabled {
+  pointer-events: none;
+}
+
+.hitZone:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+
+.model:not([data-ready='true']) .hitZone {
+  pointer-events: none;
+}
+
+.headZone {
+  z-index: 3;
+  left: 29%;
+  top: 1.5%;
+  width: 43%;
+  height: 20%;
+}
+
+.faceZone {
+  z-index: 4;
+  left: 39%;
+  top: 10%;
+  width: 23%;
+  height: 10%;
+}
+
+.figureZone {
+  z-index: 2;
+  left: 27%;
+  top: 20%;
+  width: 48%;
+  height: 76%;
+}
+
+.dialogue {
+  position: absolute;
+  z-index: 12;
+  right: 0;
+  bottom: calc(100% + 12px);
+  width: 236px;
+  padding: 11px 13px 12px 15px;
+  overflow: hidden;
+  border: 1px solid var(--chie-panel-border);
+  border-radius: 4px 10px 10px 4px;
+  background: var(--chie-panel);
+  box-shadow: 0 14px 36px var(--chie-panel-shadow);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition:
+    opacity 180ms ease,
+    visibility 180ms ease,
+    transform 180ms ease;
+  pointer-events: none;
+}
+
+.dialogue::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent-gradient);
+}
+
+.dialogueVisible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dock[data-compact='true'] .dialogue {
+  display: none;
+}
+
+.dialogueName {
+  display: block;
+  color: var(--accent-text);
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.dialogue p {
+  display: -webkit-box;
+  margin: 5px 0 0;
+  overflow: hidden;
+  color: var(--site-text-primary);
+  font-size: 0.83rem;
+  line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.collapseButton {
+  position: absolute;
+  z-index: 11;
+  right: 0;
+  top: 8px;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--chie-panel-border);
+  border-radius: 50%;
+  background: var(--chie-panel);
+  color: var(--site-text-muted);
+  box-shadow: 0 8px 22px var(--chie-panel-shadow);
+  opacity: 0.68;
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.collapseButton:hover {
+  color: var(--accent-text);
+  opacity: 1;
+  transform: translateY(1px);
+}
+
+.collapseButton:focus-visible,
+.avatarButton:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+}
+
+.collapseButton:disabled,
+.avatarButton:disabled {
+  pointer-events: none;
+}
+
+.collapseButton svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.avatarButton {
+  position: absolute;
+  z-index: 11;
+  right: 0;
+  bottom: 0;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid var(--chie-panel-border);
+  border-radius: 50%;
+  background: var(--chie-panel);
+  box-shadow: 0 8px 24px var(--chie-panel-shadow);
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.avatarButton:hover {
+  border-color: var(--accent-text);
+  transform: translateY(-2px);
+}
+
+.dock[data-compact='true'][data-speaking='true'] .avatarButton {
+  animation: chie-avatar-ack 520ms cubic-bezier(0.2, 0.75, 0.24, 1);
+}
+
+.dock[data-compact='true'][data-speaking='true'] .avatarOrbit {
+  animation-duration: 1.4s;
+}
+
+.avatarButton img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.avatarOrbit {
+  position: absolute;
+  z-index: -1;
+  inset: -5px;
+  border: 1px solid var(--chie-orbit);
+  border-top-color: var(--accent-text);
+  border-radius: 50%;
+  animation: chie-orbit 8s linear infinite;
+  pointer-events: none;
+}
+
+.statusMark {
+  position: absolute;
+  right: -1px;
+  bottom: 3px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--chie-panel);
+  border-radius: 50%;
+  background: #55b88f;
+  box-shadow: 0 0 0 1px rgba(28, 103, 73, 0.18);
+  animation: chie-status 2.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+:global(html[data-theme='dark']) .dock {
+  --chie-panel: rgba(17, 19, 24, 0.92);
+  --chie-panel-border: rgba(255, 255, 255, 0.11);
+  --chie-panel-shadow: rgba(0, 0, 0, 0.42);
+  --chie-orbit: rgba(212, 99, 110, 0.4);
+}
+
+:global(html[data-theme='dark']) .baseSprite {
+  filter:
+    drop-shadow(0 22px 22px rgba(8, 5, 16, 0.25))
+    drop-shadow(0 3px 7px rgba(8, 5, 16, 0.2));
+}
+
+:global(html[data-theme='dark']) .ambientGlow {
+  background:
+    radial-gradient(circle at 50% 28%, rgba(219, 170, 225, 0.16), transparent 38%),
+    radial-gradient(circle at 50% 62%, rgba(157, 55, 66, 0.08), transparent 55%);
+  filter: blur(24px);
+  opacity: 0.72;
+  animation: chie-glow 6s ease-in-out infinite;
+}
+
+:global(html[data-theme='dark']) .glassPlatform {
+  border-color: rgba(179, 131, 187, 0.22);
+  background:
+    radial-gradient(
+      ellipse at var(--chie-floor-glint-x) 18%,
+      rgba(255, 255, 255, 0.34),
+      rgba(182, 142, 199, 0.09) 44%,
+      rgba(91, 65, 113, 0.018) 72%
+    );
+  box-shadow:
+    0 13px 24px rgba(18, 12, 24, 0.16),
+    0 0 20px rgba(157, 55, 66, 0.06),
+    inset 0 1px rgba(255, 255, 255, 0.26);
+}
+
+:global(html[data-theme='dark']) .glassPlatform::before {
+  border-top-color: rgba(255, 255, 255, 0.36);
+}
+
+:global(html[data-theme='dark']) .contactShadow {
+  background: rgba(17, 12, 21, 0.31);
+}
+
+@keyframes chie-breathe {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  48% {
+    transform: scaleY(1.0018);
+  }
+  60% {
+    transform: scaleY(1.0011);
+  }
+}
+
+@keyframes chie-hair-lag {
+  0%,
+  100% {
+    transform: rotate(-0.16deg) translateX(-0.3px);
+  }
+  48% {
+    transform: rotate(0.28deg) translateX(0.6px);
+  }
+}
+
+@keyframes chie-cloth-lag {
+  0%,
+  100% {
+    transform: translateY(0) scaleX(1);
+  }
+  50% {
+    transform: translateY(1px) scaleX(1.002);
+  }
+}
+
+@keyframes chie-glow {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.86;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes chie-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes chie-status {
+  0%,
+  100% {
+    opacity: 0.68;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes chie-avatar-ack {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  42% {
+    transform: translateY(-4px) scale(1.04);
+  }
+  68% {
+    transform: translateY(0) scale(0.98);
+  }
+}
+
+@media (max-width: 1023px) {
+  .dock {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock,
+  .lookLayer,
+  .collapseButton,
+  .avatarButton,
+  .dialogue {
+    transition: none;
+  }
+
+  .lookLayer {
+    transform: none;
+  }
+
+  .breathLayer,
+  .hairLayer,
+  .shirtLayer,
+  .ambientGlow,
+  .avatarButton,
+  .avatarOrbit,
+  .statusMark {
+    animation: none;
+  }
+}

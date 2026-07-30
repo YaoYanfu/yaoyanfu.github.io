@@ -1,0 +1,468 @@
+.experience {
+  --chie-lilac: #bba9df;
+  --chie-pink: #e4a0cf;
+  --chie-ink: #171321;
+  width: 100%;
+  min-width: 0;
+}
+
+.stage {
+  --chie-look-rotate: 0deg;
+  --chie-floor-glint-x: 50%;
+  position: relative;
+  min-height: calc(100vh - var(--ifm-navbar-height) - 8.5rem);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.modelFrame {
+  --chie-foot-line: 94.75%;
+  position: absolute;
+  right: clamp(4%, 8vw, 14%);
+  bottom: 0;
+  height: min(78vh, 790px);
+  aspect-ratio: 867 / 1815;
+  transform: translateZ(0);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.lookLayer,
+.breathLayer,
+.sprite,
+.hitZones {
+  position: absolute;
+  inset: 0;
+}
+
+.lookLayer {
+  z-index: 2;
+  transform: rotate(var(--chie-look-rotate));
+  transform-origin: 50% var(--chie-foot-line);
+  transition: transform 320ms cubic-bezier(0.2, 0.75, 0.24, 1);
+  will-change: transform;
+}
+
+.breathLayer {
+  animation: chie-breathe 4.8s ease-in-out infinite;
+  transform-origin: 50% var(--chie-foot-line);
+}
+
+.sprite {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.baseSprite {
+  z-index: 2;
+  filter:
+    drop-shadow(0 28px 28px rgba(8, 5, 16, 0.32))
+    drop-shadow(0 4px 8px rgba(8, 5, 16, 0.24));
+}
+
+.expressionLayer {
+  z-index: 3;
+  clip-path: ellipse(12.5% 6.2% at 50.8% 14.3%);
+  opacity: 0;
+  transition: opacity 90ms ease;
+}
+
+.expressionLayerActive {
+  opacity: 1;
+}
+
+.blinkLayer {
+  z-index: 5;
+  transition-duration: 55ms;
+}
+
+.hairLayer {
+  z-index: 4;
+  clip-path: polygon(20% 0, 80% 0, 78% 24%, 21% 24%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 12.8% 6.5% at 50.8% 14.3%,
+    transparent 0 93%,
+    #000 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 12.8% 6.5% at 50.8% 14.3%,
+    transparent 0 93%,
+    #000 100%
+  );
+  opacity: 0.38;
+  transform-origin: 51% 7%;
+  animation: chie-hair-lag 5.6s ease-in-out infinite;
+}
+
+.shirtLayer {
+  z-index: 3;
+  clip-path: polygon(16% 19.5%, 83% 19.5%, 77% 49%, 22% 49%);
+  opacity: 0.2;
+  transform-origin: 50% 29%;
+  animation: chie-cloth-lag 4.8s ease-in-out infinite;
+}
+
+.ambientGlow {
+  position: absolute;
+  z-index: 0;
+  left: 2%;
+  right: 2%;
+  top: 7%;
+  bottom: 16%;
+  border-radius: 48% 52% 46% 54%;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(219, 170, 225, 0.18), transparent 38%),
+    radial-gradient(circle at 50% 58%, rgba(154, 132, 212, 0.11), transparent 52%);
+  filter: blur(28px);
+  animation: chie-glow 6s ease-in-out infinite;
+}
+
+.glassPlatform {
+  position: absolute;
+  z-index: 1;
+  left: 20%;
+  top: 92.25%;
+  width: 64%;
+  height: 5.4%;
+  border: 1px solid rgba(230, 207, 242, 0.23);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      ellipse at var(--chie-floor-glint-x) 18%,
+      rgba(255, 255, 255, 0.17),
+      rgba(190, 151, 213, 0.07) 42%,
+      rgba(91, 65, 113, 0.018) 72%
+    );
+  box-shadow:
+    0 17px 28px rgba(3, 2, 8, 0.27),
+    0 0 24px rgba(177, 127, 199, 0.09),
+    inset 0 1px rgba(255, 255, 255, 0.16);
+  transition: background-position 220ms ease;
+}
+
+.glassPlatform::before,
+.glassPlatform::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.glassPlatform::before {
+  inset: 12% 7% 47%;
+  border-top: 1px solid rgba(241, 222, 248, 0.24);
+}
+
+.glassPlatform::after {
+  inset: 37% 16% 16%;
+  border-bottom: 1px solid rgba(129, 92, 151, 0.11);
+}
+
+.contactShadow {
+  position: absolute;
+  z-index: 1;
+  border-radius: 50%;
+  background: rgba(8, 5, 14, 0.36);
+  filter: blur(2.5px);
+}
+
+.rearFootShadow {
+  left: 33.5%;
+  top: 94.45%;
+  width: 13.2%;
+  height: 0.86%;
+  transform: rotate(1deg);
+}
+
+.frontFootShadow {
+  left: 52.7%;
+  top: 94.45%;
+  width: 10.2%;
+  height: 0.86%;
+  transform: rotate(-1deg);
+}
+
+.hitZones {
+  z-index: 8;
+  pointer-events: none;
+}
+
+.hitZone {
+  position: absolute;
+  pointer-events: auto;
+  border: 1px solid transparent;
+  border-radius: 42%;
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+  padding: 0;
+  touch-action: manipulation;
+  transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.hitZone span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(15, 11, 23, 0.8);
+  color: #f5eefa;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  white-space: nowrap;
+}
+
+.stage[data-show-zones='true'] .hitZone {
+  border-color: rgba(230, 166, 216, 0.72);
+  background: rgba(216, 151, 210, 0.12);
+}
+
+.stage[data-show-zones='true'] .hitZone span {
+  opacity: 1;
+}
+
+.hitZone:focus-visible {
+  outline: 2px solid #f0a9da;
+  outline-offset: 3px;
+  background: rgba(216, 151, 210, 0.16);
+}
+
+.headZone {
+  left: 29%;
+  top: 1.5%;
+  width: 43%;
+  height: 20%;
+}
+
+.faceZone {
+  z-index: 2;
+  left: 39%;
+  top: 10%;
+  width: 23%;
+  height: 10%;
+}
+
+.figureZone {
+  left: 27%;
+  top: 20.5%;
+  width: 48%;
+  height: 75.5%;
+}
+
+.telemetry {
+  position: absolute;
+  z-index: 6;
+  right: 1rem;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  writing-mode: vertical-rl;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.telemetry::before {
+  content: '';
+  width: 1px;
+  height: 68px;
+  background: linear-gradient(transparent, rgba(220, 177, 225, 0.72), transparent);
+}
+
+.telemetry span {
+  color: rgba(225, 212, 235, 0.42);
+  font-size: 0.58rem;
+}
+
+.telemetry strong {
+  color: #e7b0dc;
+  font-size: 0.66rem;
+  font-weight: 600;
+}
+
+.dialogue {
+  position: absolute;
+  z-index: 7;
+  left: clamp(0.5rem, 3vw, 3rem);
+  top: clamp(1rem, 8vh, 5rem);
+  width: min(370px, 44%);
+  padding: 1rem 1.1rem 1.05rem;
+  border: 1px solid rgba(218, 187, 226, 0.18);
+  border-radius: 4px 16px 16px 16px;
+  background: rgba(19, 15, 28, 0.72);
+  box-shadow: 0 16px 42px rgba(5, 3, 10, 0.18);
+  backdrop-filter: blur(18px) saturate(125%);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+}
+
+.dialogue::after {
+  content: '';
+  position: absolute;
+  right: -12px;
+  bottom: 19px;
+  width: 22px;
+  height: 1px;
+  background: rgba(218, 187, 226, 0.35);
+}
+
+.dialogueName {
+  color: #d7a5cf;
+  font-size: 0.67rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.dialogue p {
+  margin: 0.48rem 0 0;
+  color: rgba(248, 244, 251, 0.88);
+  font-size: clamp(0.84rem, 1.15vw, 0.98rem);
+  line-height: 1.65;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1rem 1.15rem;
+  border-top: 1px solid rgba(218, 187, 226, 0.12);
+}
+
+.emotionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.emotionButton,
+.emotionButtonActive {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  min-height: 38px;
+  padding: 0.5rem 0.72rem;
+  border: 1px solid rgba(218, 187, 226, 0.14);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(241, 234, 246, 0.62);
+  cursor: pointer;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.emotionButton:hover,
+.emotionButtonActive {
+  border-color: rgba(223, 170, 214, 0.38);
+  background: rgba(218, 159, 211, 0.1);
+  color: #f4edf8;
+}
+
+.emotionButton:focus-visible,
+.emotionButtonActive:focus-visible {
+  outline: 2px solid #e6a7d9;
+  outline-offset: 2px;
+}
+
+.emotionButton span,
+.emotionButtonActive span {
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.emotionButton small,
+.emotionButtonActive small {
+  color: rgba(222, 177, 217, 0.54);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+}
+
+.zoneToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: rgba(239, 232, 244, 0.5);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.zoneToggle input {
+  width: 15px;
+  height: 15px;
+  accent-color: #c48fc2;
+}
+
+@keyframes chie-breathe {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  47% {
+    transform: scaleY(1.0018);
+  }
+  58% {
+    transform: scaleY(1.0012);
+  }
+}
+
+@keyframes chie-hair-lag {
+  0%,
+  100% {
+    transform: rotate(-0.18deg) translateX(-0.4px);
+  }
+  48% {
+    transform: rotate(0.32deg) translateX(0.7px);
+  }
+}
+
+@keyframes chie-cloth-lag {
+  0%,
+  100% {
+    transform: translateY(0) scaleX(1);
+  }
+  50% {
+    transform: translateY(1.4px) scaleX(1.003);
+  }
+}
+
+@keyframes chie-glow {
+  0%,
+  100% {
+    opacity: 0.64;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.03);
+  }
+}
+
+@media (max-width: 1080px) {
+  .modelFrame {
+    right: 3%;
+  }
+
+  .dialogue {
+    width: 40%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lookLayer {
+    transform: none;
+  }
+
+  .breathLayer,
+  .hairLayer,
+  .shirtLayer,
+  .ambientGlow {
+    animation: none;
+  }
+}
