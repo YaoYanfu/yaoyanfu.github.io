@@ -6,7 +6,7 @@
 
 - **框架**: Docusaurus 3.10 + React 19
 - **构建**: Rspack（`@docusaurus/faster`）
-- **看板娘**: React + CSS 分层动画 + 透明 WebP
+| **看板娘**: 独立 HTML/CSS/JS 组件（JS 弹簧物理）+ 透明 WebP |
 - **回退方案**: 保留 oh-my-live2d，可通过环境变量手动切换
 
 ## 本地开发
@@ -35,7 +35,11 @@ $env:MASCOT_MODE = 'live2d'
 npm run start
 ```
 
-CHIE 的中英文对白集中在 `src/data/chieMascot.js`，可直接修改。内部预览页位于 `/chie-preview`，不出现在导航中，并已设置为不被搜索引擎收录。
+CHIE 看板娘现由独立组件 `static/js/chie-widget.js` 提供（纯 HTML/CSS/JS，JS 弹簧物理驱动），
+由 `src/components/ChieWidgetStandalone` 在首页动态加载。素材位于 `static/img/chie/`。
+组件源码与构建脚本在 `Desktop/ProjectCHIE/chie-widget/`；对白与物理参数在组件内
+`src/data/config.js` 中修改后需重新 `npm run build` 并复制产物到 `static/js/`。
+内部预览页位于 `/chie-preview`，不出现在导航中，并已设置为不被搜索引擎收录。
 
 ## 构建
 

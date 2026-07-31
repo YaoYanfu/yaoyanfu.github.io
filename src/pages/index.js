@@ -4,7 +4,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import { useTranslation } from '@site/src/context/LanguageContext';
-import HomeChieMascot from '@site/src/components/HomeChieMascot';
+import ChieWidgetStandalone from '@site/src/components/ChieWidgetStandalone';
 
 import styles from './index.module.css';
 
@@ -214,7 +214,7 @@ export default function Home() {
 
         </main>
       </div>
-      {showChie && <HomeChieMascot />}
+      {showChie && <ChieWidgetStandalone />}
     </Layout>
   );
 }
