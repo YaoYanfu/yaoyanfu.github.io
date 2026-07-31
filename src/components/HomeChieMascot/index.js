@@ -26,7 +26,6 @@ const EXPRESSION_ASSETS = [
 
 const SEATED_REQUIRED_ASSETS = [
   CHIE_ASSETS.seatedA,
-  CHIE_ASSETS.seatedB,
 ];
 
 const EXPRESSION_TIMING = {
@@ -734,7 +733,7 @@ export default function HomeChieMascot() {
                 />
                 <img
                   className={`${styles.sprite} ${styles.seatedFrame} ${styles.seatedLeg} ${styles.seatedLegLeft}`}
-                  src={`${assetRoot}${CHIE_ASSETS.seatedB}`}
+                  src={`${assetRoot}${CHIE_ASSETS.seatedA}`}
                   alt=""
                   draggable="false"
                   decoding="async"
@@ -750,6 +749,22 @@ export default function HomeChieMascot() {
                 />
                 <img
                   className={`${styles.sprite} ${styles.seatedFrame} ${styles.seatedUpperStatic}`}
+                  src={`${assetRoot}${CHIE_ASSETS.seatedA}`}
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                  onError={disableSeatedIdle}
+                />
+                <img
+                  className={`${styles.sprite} ${styles.seatedFrame} ${styles.seatedKneeBridge}`}
+                  src={`${assetRoot}${CHIE_ASSETS.seatedA}`}
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                  onError={disableSeatedIdle}
+                />
+                <img
+                  className={`${styles.sprite} ${styles.seatedFrame} ${styles.seatedHemDetail}`}
                   src={`${assetRoot}${CHIE_ASSETS.seatedA}`}
                   alt=""
                   draggable="false"

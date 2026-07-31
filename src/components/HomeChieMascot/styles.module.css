@@ -282,6 +282,7 @@
 
 .seatedFrame {
   z-index: 2;
+  object-fit: fill;
   transform-box: border-box;
 }
 
@@ -301,44 +302,92 @@
 
 .seatedUpperStatic {
   z-index: 4;
-  clip-path: inset(0 0 38% 0);
+  clip-path: inset(0 0 39.5% 0);
 }
 
 .seatedLeg {
   z-index: 3;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0 58.4%,
+    rgba(0, 0, 0, 0.35) 59.1%,
+    #000 61.1% 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0 58.4%,
+    rgba(0, 0, 0, 0.35) 59.1%,
+    #000 61.1% 100%
+  );
   will-change: transform;
 }
 
 .seatedLegLeft {
   clip-path: polygon(
-    36.5% 58%,
-    50% 58%,
+    36% 56.5%,
+    50% 56.5%,
     47.5% 91%,
     35.5% 91%
   );
-  transform-origin: 44.2% 61.1%;
-  transform:
-    translateX(-0.86%)
-    rotate(1.04deg)
-    scale(0.95, 0.874);
+  transform-origin: 43.5% 60.8%;
 }
 
 .seatedLegRight {
   clip-path: polygon(
-    49% 58%,
-    62.5% 58%,
+    48.5% 56.5%,
+    62.5% 56.5%,
     64% 92%,
     50.5% 92%
   );
-  transform-origin: 54.7% 61.1%;
-  transform:
-    translateX(0)
-    rotate(0)
-    scale(1, 1);
+  transform-origin: 54.7% 60.8%;
+}
+
+.seatedKneeBridge {
+  z-index: 5;
+  clip-path: inset(56.6% 31.5% 36.4%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0 57%,
+    #000 58.8% 61.4%,
+    transparent 63.3% 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0 57%,
+    #000 58.8% 61.4%,
+    transparent 63.3% 100%
+  );
+}
+
+.seatedHemDetail {
+  z-index: 6;
+  clip-path: polygon(
+    25% 48.5%,
+    75% 48.5%,
+    73% 57.4%,
+    27% 57.4%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0 48.5%,
+    #000 49.6% 56.3%,
+    transparent 57.5% 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0 48.5%,
+    #000 49.6% 56.3%,
+    transparent 57.5% 100%
+  );
+  mix-blend-mode: multiply;
+  filter: contrast(1.06) saturate(0.94);
+  opacity: 0.1;
+  transform-origin: 50% 57%;
+  will-change: opacity, transform;
 }
 
 .seatedBlinkLayer {
-  z-index: 6;
+  z-index: 7;
   clip-path: ellipse(11% 3.2% at 50.8% 16%);
   -webkit-mask-image: radial-gradient(
     ellipse 11% 3.2% at 50.8% 16%,
@@ -493,20 +542,27 @@
 .model[data-idle-phase='seated'] .seatedLegLeft {
   animation:
     chie-leg-left-interpolate
-    1500ms
+    3000ms
     cubic-bezier(0.37, 0, 0.63, 1)
-    6
-    alternate
+    3
     both;
 }
 
 .model[data-idle-phase='seated'] .seatedLegRight {
   animation:
     chie-leg-right-interpolate
-    1500ms
+    3000ms
     cubic-bezier(0.37, 0, 0.63, 1)
-    6
-    alternate
+    3
+    both;
+}
+
+.model[data-idle-phase='seated'] .seatedHemDetail {
+  animation:
+    chie-seated-hem-detail
+    3000ms
+    cubic-bezier(0.37, 0, 0.63, 1)
+    3
     both;
 }
 
@@ -988,32 +1044,34 @@
 }
 
 @keyframes chie-leg-left-interpolate {
-  from {
-    transform:
-      translateX(-0.86%)
-      rotate(1.04deg)
-      scale(0.95, 0.874);
+  0%,
+  100% {
+    transform: rotate(0) scaleY(1);
   }
-  to {
-    transform:
-      translateX(-0.86%)
-      rotate(0)
-      scale(1, 1);
+  50% {
+    transform: rotate(-0.55deg) scaleY(1.045);
   }
 }
 
 @keyframes chie-leg-right-interpolate {
-  from {
-    transform:
-      translateX(0)
-      rotate(0)
-      scale(1, 1);
+  0%,
+  100% {
+    transform: rotate(0) scaleY(1);
   }
-  to {
-    transform:
-      translateX(0)
-      rotate(-1.6deg)
-      scale(0.9, 0.813);
+  50% {
+    transform: rotate(0.48deg) scaleY(0.955);
+  }
+}
+
+@keyframes chie-seated-hem-detail {
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: translateY(0) scaleX(1);
+  }
+  50% {
+    opacity: 0.13;
+    transform: translateY(0.05%) scaleX(1.001);
   }
 }
 
@@ -1155,6 +1213,7 @@
   .shirtLayer,
   .seatedLegLeft,
   .seatedLegRight,
+  .seatedHemDetail,
   .expressionPart,
   .holoTransition,
   .holoTransition span,
