@@ -1,10 +1,13 @@
 export const CHIE_ASSETS = {
-  idle: 'chie-teen-idle.webp',
-  annoyed: 'chie-teen-annoyed.webp',
-  shy: 'chie-teen-shy.webp',
-  alert: 'chie-teen-alert.webp',
-  blink: 'chie-teen-blink.webp',
-  avatar: 'chie-teen-avatar.webp',
+  idle: 'chie-v2-idle.webp',
+  annoyed: 'chie-v2-annoyed.webp',
+  shy: 'chie-v2-shy.webp',
+  alert: 'chie-v2-alert.webp',
+  blink: 'chie-v2-blink.webp',
+  avatar: 'chie-v2-avatar.webp',
+  seatedA: 'chie-v2-seated-a.webp',
+  seatedB: 'chie-v2-seated-b.webp',
+  seatedBlink: 'chie-v2-seated-blink.webp',
 };
 
 export const CHIE_REACTIONS = {

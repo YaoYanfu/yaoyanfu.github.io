@@ -7,31 +7,31 @@ const EMOTIONS = {
   idle: {
     label: '待机',
     tag: 'IDLE',
-    sprite: 'chie-teen-idle.webp',
+    sprite: 'chie-v2-idle.webp',
     line: '看什么看？系统监控一切正常……你该不会又在偷懒吧？',
   },
   annoyed: {
     label: '不耐烦',
     tag: 'ANNOYED',
-    sprite: 'chie-teen-annoyed.webp',
+    sprite: 'chie-v2-annoyed.webp',
     line: '哼。别误会，我只是在确认你有没有认真做事。',
   },
   shy: {
     label: '害羞',
     tag: 'FLUSTERED',
-    sprite: 'chie-teen-shy.webp',
+    sprite: 'chie-v2-shy.webp',
     line: '别一直盯着我看……很影响系统判断的，笨蛋。',
   },
   alert: {
     label: '警觉',
     tag: 'ALERT',
-    sprite: 'chie-teen-alert.webp',
+    sprite: 'chie-v2-alert.webp',
     line: '检测到可疑操作。你最好解释一下。',
   },
 };
 
 const EXPRESSION_KEYS = ['annoyed', 'shy', 'alert'];
-const BLINK_SPRITE = 'chie-teen-blink.webp';
+const BLINK_SPRITE = 'chie-v2-blink.webp';
 
 const REACTIONS = {
   head: {

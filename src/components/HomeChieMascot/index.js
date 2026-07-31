@@ -14,6 +14,7 @@ const STORAGE = {
   collapsed: 'chie_widget_collapsed_v1',
   failed: 'chie_widget_failed_v1',
   greeted: 'chie_widget_greeted_v1',
+  seatedFailed: 'chie_widget_seated_failed_v1',
 };
 
 const EXPRESSION_ASSETS = [
@@ -22,6 +23,17 @@ const EXPRESSION_ASSETS = [
   CHIE_ASSETS.shy,
   CHIE_ASSETS.alert,
 ];
+
+const SEATED_REQUIRED_ASSETS = [
+  CHIE_ASSETS.seatedA,
+  CHIE_ASSETS.seatedB,
+];
+
+const EXPRESSION_TIMING = {
+  enter: 320,
+  hold: 2800,
+  exit: 360,
+};
 
 function getViewportMode() {
   if (window.innerWidth <= 1023) return 'hidden';
@@ -53,35 +65,38 @@ export default function HomeChieMascot() {
   const pointerFrameRef = useRef(null);
   const dialogueTimerRef = useRef(null);
   const emotionTimerRef = useRef(null);
-  const manualOpenRef = useRef(false);
+  const idleTimerRef = useRef(null);
+  const idleCycleCountRef = useRef(0);
+  const seatedPreloadPromiseRef = useRef(null);
   const unavailableAssetsRef = useRef(new Set());
 
   const [viewportMode, setViewportMode] = useState(null);
   const [entryDelayElapsed, setEntryDelayElapsed] = useState(false);
   const [failed, setFailed] = useState(false);
   const [userCollapsed, setUserCollapsed] = useState(false);
-  const [scrollCollapsed, setScrollCollapsed] = useState(false);
-  const [collisionCollapsed, setCollisionCollapsed] = useState(false);
-  const [footerCollapsed, setFooterCollapsed] = useState(false);
+  const [seatedIdleDisabled, setSeatedIdleDisabled] = useState(false);
+  const [seatedReady, setSeatedReady] = useState(false);
+  const [idlePhase, setIdlePhase] = useState('standing');
   const [baseLoaded, setBaseLoaded] = useState(false);
   const [avatarLoaded, setAvatarLoaded] = useState(false);
-  const [emotion, setEmotion] = useState('idle');
+  const [reaction, setReaction] = useState({
+    name: 'idle',
+    phase: 'idle',
+    id: 0,
+  });
   const [blinking, setBlinking] = useState(false);
   const [messageKey, setMessageKey] = useState('greeting');
   const [speaking, setSpeaking] = useState(false);
 
-  const autoCollapsed =
-    viewportMode === 'full'
-    && (scrollCollapsed || collisionCollapsed || footerCollapsed);
   const fullVisible =
-    viewportMode === 'full' && !userCollapsed && !autoCollapsed;
+    viewportMode === 'full' && !userCollapsed;
   const compactVisible =
     viewportMode === 'compact'
-    || (viewportMode === 'full' && !fullVisible);
+    || (viewportMode === 'full' && userCollapsed);
   const entryAssetReady = fullVisible ? baseLoaded : avatarLoaded;
   const entered = entryDelayElapsed && entryAssetReady;
-  const canExpand =
-    viewportMode === 'full' && !collisionCollapsed && !footerCollapsed;
+  const canExpand = viewportMode === 'full';
+  const emotion = reaction.name;
 
   const clearDialogueTimer = useCallback(() => {
     if (dialogueTimerRef.current) {
@@ -94,6 +109,21 @@ export default function HomeChieMascot() {
     if (emotionTimerRef.current) {
       window.clearTimeout(emotionTimerRef.current);
       emotionTimerRef.current = null;
+    }
+  }, []);
+
+  const resetReaction = useCallback(() => {
+    clearEmotionTimer();
+    setReaction((current) => {
+      if (current.phase === 'idle' && current.name === 'idle') return current;
+      return {name: 'idle', phase: 'idle', id: current.id};
+    });
+  }, [clearEmotionTimer]);
+
+  const clearIdleTimer = useCallback(() => {
+    if (idleTimerRef.current) {
+      window.clearTimeout(idleTimerRef.current);
+      idleTimerRef.current = null;
     }
   }, []);
 
@@ -114,23 +144,84 @@ export default function HomeChieMascot() {
     setFailed(true);
   }, []);
 
+  const handleReactionAssetError = useCallback((asset, reactionId) => {
+    unavailableAssetsRef.current.add(asset);
+    setReaction((current) => (
+      current.id === reactionId
+        ? {name: 'idle', phase: 'idle', id: current.id}
+        : current
+    ));
+  }, []);
+
+  const disableSeatedIdle = useCallback(() => {
+    clearIdleTimer();
+    setBlinking(false);
+    setIdlePhase('standing');
+    setSeatedIdleDisabled(true);
+    try {
+      sessionStorage.setItem(STORAGE.seatedFailed, '1');
+    } catch {}
+  }, [clearIdleTimer]);
+
+  const preloadSeatedAssets = useCallback(() => {
+    if (seatedPreloadPromiseRef.current) {
+      return seatedPreloadPromiseRef.current;
+    }
+
+    const loadImage = (asset, required) => new Promise((resolve, reject) => {
+      const image = new Image();
+      image.decoding = 'async';
+      image.fetchPriority = 'low';
+      image.onload = () => {
+        const decoded = typeof image.decode === 'function'
+          ? image.decode().catch(() => {})
+          : Promise.resolve();
+        decoded.then(() => resolve(true));
+      };
+      image.onerror = () => {
+        unavailableAssetsRef.current.add(asset);
+        if (required) reject(new Error(`Unable to load ${asset}`));
+        else resolve(false);
+      };
+      image.src = `${assetRoot}${asset}`;
+    });
+
+    const required = Promise.all(
+      SEATED_REQUIRED_ASSETS.map((asset) => loadImage(asset, true)),
+    );
+    loadImage(CHIE_ASSETS.seatedBlink, false);
+
+    seatedPreloadPromiseRef.current = required
+      .then(() => {
+        setSeatedReady(true);
+        return true;
+      })
+      .catch(() => false);
+
+    return seatedPreloadPromiseRef.current;
+  }, [assetRoot]);
+
+  const interruptIdle = useCallback(() => {
+    clearIdleTimer();
+    idleCycleCountRef.current = Math.max(1, idleCycleCountRef.current);
+    setBlinking(false);
+    setIdlePhase('standing');
+  }, [clearIdleTimer]);
+
   useEffect(() => {
     try {
       setFailed(sessionStorage.getItem(STORAGE.failed) === '1');
       setUserCollapsed(sessionStorage.getItem(STORAGE.collapsed) === '1');
+      setSeatedIdleDisabled(
+        sessionStorage.getItem(STORAGE.seatedFailed) === '1',
+      );
     } catch {}
 
     let resizeFrame = null;
     const updateViewport = () => {
       if (resizeFrame) window.cancelAnimationFrame(resizeFrame);
       resizeFrame = window.requestAnimationFrame(() => {
-        const nextMode = getViewportMode();
-        setViewportMode(nextMode);
-        if (nextMode === 'full' && !manualOpenRef.current) {
-          setScrollCollapsed(window.scrollY > window.innerHeight);
-        } else if (nextMode !== 'full') {
-          setScrollCollapsed(false);
-        }
+        setViewportMode(getViewportMode());
       });
     };
 
@@ -156,95 +247,21 @@ export default function HomeChieMascot() {
   }, [entryDelayElapsed, failed, viewportMode]);
 
   useEffect(() => {
-    if (viewportMode !== 'full') {
-      setScrollCollapsed(false);
-      return undefined;
-    }
-
-    let frame = null;
-    const update = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(() => {
-        frame = null;
-        setScrollCollapsed(
-          !manualOpenRef.current && window.scrollY > window.innerHeight,
-        );
-      });
-    };
-
-    update();
-    window.addEventListener('scroll', update, {passive: true});
-    return () => {
-      window.removeEventListener('scroll', update);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, [viewportMode]);
-
-  useEffect(() => {
-    if (viewportMode !== 'full') {
-      setCollisionCollapsed(false);
-      return undefined;
-    }
-
-    const content = document.querySelector('[data-chie-safe-content]');
-    if (!content) return undefined;
-
-    let frame = null;
-    const measure = () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        const dock = dockRef.current;
-        if (!dock) return;
-        const contentRight = content.getBoundingClientRect().right;
-        const dockLeft = dock.getBoundingClientRect().left;
-        setCollisionCollapsed(contentRight > dockLeft - 8);
-      });
-    };
-
-    measure();
-    window.addEventListener('resize', measure, {passive: true});
-    const observer = typeof ResizeObserver === 'undefined'
-      ? null
-      : new ResizeObserver(measure);
-    observer?.observe(content);
-
-    return () => {
-      window.removeEventListener('resize', measure);
-      observer?.disconnect();
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, [entered, viewportMode]);
-
-  useEffect(() => {
-    if (viewportMode !== 'full' || typeof IntersectionObserver === 'undefined') {
-      setFooterCollapsed(false);
-      return undefined;
-    }
-
-    const footer = document.querySelector('footer');
-    if (!footer) return undefined;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setFooterCollapsed(entry.isIntersecting),
-      {threshold: 0.02},
-    );
-    observer.observe(footer);
-    return () => observer.disconnect();
-  }, [viewportMode]);
-
-  useEffect(() => {
-    if (userCollapsed || autoCollapsed) {
+    if (!fullVisible) {
       clearDialogueTimer();
       clearEmotionTimer();
+      clearIdleTimer();
       setSpeaking(false);
-      setEmotion('idle');
+      resetReaction();
       setBlinking(false);
+      setIdlePhase('standing');
     }
   }, [
-    autoCollapsed,
     clearDialogueTimer,
     clearEmotionTimer,
-    userCollapsed,
+    clearIdleTimer,
+    fullVisible,
+    resetReaction,
   ]);
 
   useEffect(() => {
@@ -253,7 +270,6 @@ export default function HomeChieMascot() {
       || failed
       || viewportMode !== 'full'
       || userCollapsed
-      || autoCollapsed
     ) {
       return;
     }
@@ -264,7 +280,6 @@ export default function HomeChieMascot() {
     } catch {}
     showMessage('greeting');
   }, [
-    autoCollapsed,
     entered,
     failed,
     showMessage,
@@ -310,7 +325,81 @@ export default function HomeChieMascot() {
   }, [assetRoot, baseLoaded, failed, fullVisible]);
 
   useEffect(() => {
-    if (!fullVisible || !baseLoaded || reducedMotion || failed) {
+    const eligible =
+      fullVisible
+      && entered
+      && baseLoaded
+      && !failed
+      && !reducedMotion
+      && !seatedIdleDisabled
+      && reaction.phase === 'idle'
+      && !speaking;
+
+    if (!eligible) {
+      clearIdleTimer();
+      if (idlePhase !== 'standing') setIdlePhase('standing');
+      return undefined;
+    }
+
+    let cancelled = false;
+    const schedule = (callback, delay) => {
+      idleTimerRef.current = window.setTimeout(callback, delay);
+    };
+
+    if (idlePhase === 'standing') {
+      const firstCycle = idleCycleCountRef.current === 0;
+      const delay = firstCycle
+        ? 5000 + Math.random() * 3000
+        : 12000 + Math.random() * 6000;
+      schedule(async () => {
+        const ready = await preloadSeatedAssets();
+        if (cancelled) return;
+        if (!ready) {
+          disableSeatedIdle();
+          return;
+        }
+        setIdlePhase('chair-in');
+      }, delay);
+    } else if (idlePhase === 'chair-in') {
+      schedule(() => setIdlePhase('seated'), 720);
+    } else if (idlePhase === 'seated') {
+      schedule(() => setIdlePhase('chair-out'), 9000);
+    } else if (idlePhase === 'chair-out') {
+      schedule(() => {
+        idleCycleCountRef.current += 1;
+        setIdlePhase('standing');
+      }, 720);
+    }
+
+    return () => {
+      cancelled = true;
+      clearIdleTimer();
+    };
+  }, [
+    baseLoaded,
+    clearIdleTimer,
+    disableSeatedIdle,
+    entered,
+    failed,
+    fullVisible,
+    idlePhase,
+    preloadSeatedAssets,
+    reaction.phase,
+    reducedMotion,
+    seatedIdleDisabled,
+    speaking,
+  ]);
+
+  useEffect(() => {
+    if (
+      !fullVisible
+      || !baseLoaded
+      || reducedMotion
+      || failed
+      || reaction.phase !== 'idle'
+      || idlePhase === 'chair-in'
+      || idlePhase === 'chair-out'
+    ) {
       setBlinking(false);
       return undefined;
     }
@@ -322,7 +411,10 @@ export default function HomeChieMascot() {
     const schedule = () => {
       blinkTimer = window.setTimeout(() => {
         if (cancelled) return;
-        if (unavailableAssetsRef.current.has(CHIE_ASSETS.blink)) return;
+        const blinkAsset = idlePhase === 'seated'
+          ? CHIE_ASSETS.seatedBlink
+          : CHIE_ASSETS.blink;
+        if (unavailableAssetsRef.current.has(blinkAsset)) return;
         setBlinking(true);
         blinkEndTimer = window.setTimeout(() => {
           if (cancelled) return;
@@ -339,47 +431,99 @@ export default function HomeChieMascot() {
       if (blinkEndTimer) window.clearTimeout(blinkEndTimer);
       setBlinking(false);
     };
-  }, [baseLoaded, failed, fullVisible, reducedMotion]);
+  }, [
+    baseLoaded,
+    failed,
+    fullVisible,
+    idlePhase,
+    reaction.phase,
+    reducedMotion,
+  ]);
+
+  useEffect(() => {
+    if (reaction.phase === 'idle') return undefined;
+
+    if (reducedMotion && reaction.phase !== 'hold') {
+      setReaction((current) => {
+        if (current.id !== reaction.id) return current;
+        return reaction.phase === 'exit'
+          ? {name: 'idle', phase: 'idle', id: current.id}
+          : {...current, phase: 'hold'};
+      });
+      return undefined;
+    }
+
+    const duration = EXPRESSION_TIMING[reaction.phase];
+    emotionTimerRef.current = window.setTimeout(() => {
+      setReaction((current) => {
+        if (
+          current.id !== reaction.id
+          || current.phase !== reaction.phase
+        ) {
+          return current;
+        }
+        if (current.phase === 'enter') return {...current, phase: 'hold'};
+        if (current.phase === 'hold') {
+          return reducedMotion
+            ? {name: 'idle', phase: 'idle', id: current.id}
+            : {...current, phase: 'exit'};
+        }
+        return {name: 'idle', phase: 'idle', id: current.id};
+      });
+      emotionTimerRef.current = null;
+    }, duration);
+
+    return clearEmotionTimer;
+  }, [
+    clearEmotionTimer,
+    reaction.id,
+    reaction.phase,
+    reducedMotion,
+  ]);
 
   useEffect(() => () => {
     clearDialogueTimer();
     clearEmotionTimer();
+    clearIdleTimer();
     if (pointerFrameRef.current) {
       window.cancelAnimationFrame(pointerFrameRef.current);
     }
-  }, [clearDialogueTimer, clearEmotionTimer]);
+  }, [clearDialogueTimer, clearEmotionTimer, clearIdleTimer]);
 
   const reactTo = useCallback((zone) => {
-    const reaction = CHIE_REACTIONS[zone];
-    const reactionAsset = CHIE_ASSETS[reaction.emotion];
+    const nextReaction = CHIE_REACTIONS[zone];
+    const reactionAsset = CHIE_ASSETS[nextReaction.emotion];
+    interruptIdle();
     clearEmotionTimer();
-    setEmotion(
-      unavailableAssetsRef.current.has(reactionAsset)
-        ? 'idle'
-        : reaction.emotion,
-    );
-    showMessage(reaction.message);
-    emotionTimerRef.current = window.setTimeout(() => {
-      setEmotion('idle');
-      emotionTimerRef.current = null;
-    }, 3600);
-  }, [clearEmotionTimer, showMessage]);
+    if (!unavailableAssetsRef.current.has(reactionAsset)) {
+      setReaction((current) => ({
+        name: nextReaction.emotion,
+        phase: reducedMotion ? 'hold' : 'enter',
+        id: current.id + 1,
+      }));
+    }
+    showMessage(nextReaction.message);
+  }, [
+    clearEmotionTimer,
+    interruptIdle,
+    reducedMotion,
+    showMessage,
+  ]);
 
   const collapse = useCallback(() => {
-    manualOpenRef.current = false;
+    interruptIdle();
     clearDialogueTimer();
+    resetReaction();
     setSpeaking(false);
     setUserCollapsed(true);
     try {
       sessionStorage.setItem(STORAGE.collapsed, '1');
     } catch {}
-  }, [clearDialogueTimer]);
+  }, [clearDialogueTimer, interruptIdle, resetReaction]);
 
   const openFromAvatar = useCallback(() => {
     if (canExpand) {
-      manualOpenRef.current = true;
       setUserCollapsed(false);
-      setScrollCollapsed(false);
       try {
         sessionStorage.removeItem(STORAGE.collapsed);
       } catch {}
@@ -423,6 +567,12 @@ export default function HomeChieMascot() {
 
   if (!viewportMode || viewportMode === 'hidden' || failed) return null;
 
+  const reactionPhaseClass = {
+    enter: styles.expressionEnter,
+    hold: styles.expressionHold,
+    exit: styles.expressionExit,
+  }[reaction.phase] || '';
+
   return (
     <aside
       ref={dockRef}
@@ -449,6 +599,10 @@ export default function HomeChieMascot() {
           <div
             className={styles.model}
             data-ready={baseLoaded ? 'true' : 'false'}
+            data-idle-phase={idlePhase}
+            data-reaction-phase={reaction.phase}
+            data-reaction-name={reaction.name}
+            data-reaction-id={reaction.id}
             onPointerMove={updateLook}
             onPointerLeave={resetLook}
           >
@@ -462,92 +616,201 @@ export default function HomeChieMascot() {
               className={`${styles.contactShadow} ${styles.frontFootShadow}`}
               aria-hidden="true"
             />
+            <div
+              className={`${styles.contactShadow} ${styles.chairContactShadow}`}
+              aria-hidden="true"
+            />
 
-            <div className={styles.lookLayer}>
-              <div className={styles.breathLayer}>
+            <div className={styles.standingScene}>
+              <div className={styles.lookLayer}>
+                <div className={styles.breathLayer}>
+                  <img
+                    className={`${styles.sprite} ${styles.baseSprite}`}
+                    src={`${assetRoot}${CHIE_ASSETS.idle}`}
+                    alt={copy.alt}
+                    draggable="false"
+                    decoding="async"
+                    fetchPriority="high"
+                    onLoad={() => setBaseLoaded(true)}
+                    onError={hideForSession}
+                  />
+
+                  {emotion !== 'idle' && (
+                    <div
+                      key={`${reaction.name}-${reaction.id}`}
+                      className={`${styles.expressionGroup} ${reactionPhaseClass}`}
+                      aria-hidden="true"
+                    >
+                      <img
+                        className={`${styles.sprite} ${styles.expressionPart} ${styles.expressionToneLayer}`}
+                        src={`${assetRoot}${CHIE_ASSETS[emotion]}`}
+                        alt=""
+                        draggable="false"
+                        decoding="async"
+                        onError={() => handleReactionAssetError(
+                          CHIE_ASSETS[emotion],
+                          reaction.id,
+                        )}
+                      />
+                      <img
+                        className={`${styles.sprite} ${styles.expressionPart} ${styles.expressionEyesLayer}`}
+                        src={`${assetRoot}${CHIE_ASSETS[emotion]}`}
+                        alt=""
+                        draggable="false"
+                        decoding="async"
+                        onError={() => handleReactionAssetError(
+                          CHIE_ASSETS[emotion],
+                          reaction.id,
+                        )}
+                      />
+                      <img
+                        className={`${styles.sprite} ${styles.expressionPart} ${styles.expressionMouthLayer}`}
+                        src={`${assetRoot}${CHIE_ASSETS[emotion]}`}
+                        alt=""
+                        draggable="false"
+                        decoding="async"
+                        onError={() => handleReactionAssetError(
+                          CHIE_ASSETS[emotion],
+                          reaction.id,
+                        )}
+                      />
+                      <img
+                        className={`${styles.sprite} ${styles.expressionPart} ${styles.expressionBridgeLayer}`}
+                        src={`${assetRoot}${CHIE_ASSETS.blink}`}
+                        alt=""
+                        draggable="false"
+                        decoding="async"
+                        onError={() => {
+                          unavailableAssetsRef.current.add(
+                            CHIE_ASSETS.blink,
+                          );
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  {blinking && idlePhase === 'standing' && (
+                    <img
+                      className={`${styles.sprite} ${styles.expressionLayer} ${styles.blinkLayer} ${styles.expressionLayerActive}`}
+                      src={`${assetRoot}${CHIE_ASSETS.blink}`}
+                      alt=""
+                      draggable="false"
+                      decoding="async"
+                      onError={() => {
+                        unavailableAssetsRef.current.add(CHIE_ASSETS.blink);
+                        setBlinking(false);
+                      }}
+                      aria-hidden="true"
+                    />
+                  )}
+
+                  <img
+                    className={`${styles.sprite} ${styles.hairLayer}`}
+                    src={`${assetRoot}${CHIE_ASSETS.idle}`}
+                    alt=""
+                    draggable="false"
+                    aria-hidden="true"
+                  />
+                  <img
+                    className={`${styles.sprite} ${styles.shirtLayer}`}
+                    src={`${assetRoot}${CHIE_ASSETS.idle}`}
+                    alt=""
+                    draggable="false"
+                    aria-hidden="true"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {seatedReady && (
+              <div className={styles.seatedScene} aria-hidden="true">
                 <img
-                  className={`${styles.sprite} ${styles.baseSprite}`}
-                  src={`${assetRoot}${CHIE_ASSETS.idle}`}
-                  alt={copy.alt}
+                  className={`${styles.sprite} ${styles.seatedFrame} ${styles.seatedChairStatic}`}
+                  src={`${assetRoot}${CHIE_ASSETS.seatedA}`}
+                  alt=""
                   draggable="false"
                   decoding="async"
-                  fetchPriority="high"
-                  onLoad={() => setBaseLoaded(true)}
-                  onError={hideForSession}
+                  onError={disableSeatedIdle}
                 />
-
-                {emotion !== 'idle' && (
+                <img
+                  className={`${styles.sprite} ${styles.seatedFrame} ${styles.seatedLeg} ${styles.seatedLegLeft}`}
+                  src={`${assetRoot}${CHIE_ASSETS.seatedB}`}
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                  onError={disableSeatedIdle}
+                />
+                <img
+                  className={`${styles.sprite} ${styles.seatedFrame} ${styles.seatedLeg} ${styles.seatedLegRight}`}
+                  src={`${assetRoot}${CHIE_ASSETS.seatedA}`}
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                  onError={disableSeatedIdle}
+                />
+                <img
+                  className={`${styles.sprite} ${styles.seatedFrame} ${styles.seatedUpperStatic}`}
+                  src={`${assetRoot}${CHIE_ASSETS.seatedA}`}
+                  alt=""
+                  draggable="false"
+                  decoding="async"
+                  onError={disableSeatedIdle}
+                />
+                {blinking && idlePhase === 'seated' && (
                   <img
-                    className={`${styles.sprite} ${styles.expressionLayer} ${styles.expressionLayerActive}`}
-                    src={`${assetRoot}${CHIE_ASSETS[emotion]}`}
+                    className={`${styles.sprite} ${styles.seatedBlinkLayer}`}
+                    src={`${assetRoot}${CHIE_ASSETS.seatedBlink}`}
                     alt=""
                     draggable="false"
                     decoding="async"
                     onError={() => {
                       unavailableAssetsRef.current.add(
-                        CHIE_ASSETS[emotion],
+                        CHIE_ASSETS.seatedBlink,
                       );
-                      setEmotion('idle');
-                    }}
-                    aria-hidden="true"
-                  />
-                )}
-
-                {blinking && (
-                  <img
-                    className={`${styles.sprite} ${styles.expressionLayer} ${styles.blinkLayer} ${styles.expressionLayerActive}`}
-                    src={`${assetRoot}${CHIE_ASSETS.blink}`}
-                    alt=""
-                    draggable="false"
-                    decoding="async"
-                    onError={() => {
-                      unavailableAssetsRef.current.add(CHIE_ASSETS.blink);
                       setBlinking(false);
                     }}
-                    aria-hidden="true"
                   />
                 )}
-
-                <img
-                  className={`${styles.sprite} ${styles.hairLayer}`}
-                  src={`${assetRoot}${CHIE_ASSETS.idle}`}
-                  alt=""
-                  draggable="false"
-                  aria-hidden="true"
-                />
-                <img
-                  className={`${styles.sprite} ${styles.shirtLayer}`}
-                  src={`${assetRoot}${CHIE_ASSETS.idle}`}
-                  alt=""
-                  draggable="false"
-                  aria-hidden="true"
-                />
               </div>
+            )}
+
+            <div className={styles.holoTransition} aria-hidden="true">
+              <span />
             </div>
 
-            <div className={styles.hitZones}>
+            {idlePhase === 'standing' ? (
+              <div className={styles.hitZones}>
+                <button
+                  type="button"
+                  className={`${styles.hitZone} ${styles.figureZone}`}
+                  aria-label={copy.actions.figure}
+                  onClick={() => reactTo('figure')}
+                  disabled={!entered || !baseLoaded}
+                />
+                <button
+                  type="button"
+                  className={`${styles.hitZone} ${styles.headZone}`}
+                  aria-label={copy.actions.head}
+                  onClick={() => reactTo('head')}
+                  disabled={!entered || !baseLoaded}
+                />
+                <button
+                  type="button"
+                  className={`${styles.hitZone} ${styles.faceZone}`}
+                  aria-label={copy.actions.face}
+                  onClick={() => reactTo('face')}
+                  disabled={!entered || !baseLoaded}
+                />
+              </div>
+            ) : (
               <button
                 type="button"
-                className={`${styles.hitZone} ${styles.figureZone}`}
+                className={styles.seatedInterruptZone}
                 aria-label={copy.actions.figure}
                 onClick={() => reactTo('figure')}
                 disabled={!entered || !baseLoaded}
               />
-              <button
-                type="button"
-                className={`${styles.hitZone} ${styles.headZone}`}
-                aria-label={copy.actions.head}
-                onClick={() => reactTo('head')}
-                disabled={!entered || !baseLoaded}
-              />
-              <button
-                type="button"
-                className={`${styles.hitZone} ${styles.faceZone}`}
-                aria-label={copy.actions.face}
-                onClick={() => reactTo('face')}
-                disabled={!entered || !baseLoaded}
-              />
-            </div>
+            )}
           </div>
 
           <button

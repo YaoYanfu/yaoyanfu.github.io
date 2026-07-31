@@ -6,6 +6,8 @@
   --chie-panel-border: rgba(26, 26, 28, 0.13);
   --chie-panel-shadow: rgba(26, 21, 28, 0.16);
   --chie-orbit: rgba(157, 55, 66, 0.34);
+  --chie-holo: rgba(190, 137, 216, 0.48);
+  --chie-holo-line: rgba(244, 225, 255, 0.82);
 
   position: fixed;
   z-index: 90;
@@ -53,9 +55,17 @@
 .lookLayer,
 .breathLayer,
 .sprite,
-.hitZones {
+.hitZones,
+.standingScene,
+.seatedScene,
+.expressionGroup,
+.holoTransition {
   position: absolute;
   inset: 0;
+}
+
+.standingScene {
+  z-index: 2;
 }
 
 .lookLayer {
@@ -77,6 +87,7 @@
   object-fit: contain;
   pointer-events: none;
   -webkit-user-drag: none;
+  backface-visibility: hidden;
 }
 
 .baseSprite {
@@ -84,6 +95,131 @@
   filter:
     drop-shadow(0 9px 8px rgba(47, 34, 52, 0.13))
     drop-shadow(0 2px 2px rgba(47, 34, 52, 0.16));
+}
+
+.expressionGroup {
+  z-index: 3;
+  pointer-events: none;
+}
+
+.expressionPart {
+  opacity: 0;
+  will-change: opacity;
+}
+
+.expressionToneLayer {
+  z-index: 3;
+  clip-path: ellipse(13.2% 6.7% at 50.8% 14.35%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 13.2% 6.7% at 50.8% 14.35%,
+    #000 0 82%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 13.2% 6.7% at 50.8% 14.35%,
+    #000 0 82%,
+    transparent 100%
+  );
+}
+
+.expressionEyesLayer {
+  z-index: 4;
+  clip-path: ellipse(11.2% 3.4% at 50.8% 13.7%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 11.2% 3.4% at 50.8% 13.7%,
+    #000 0 88%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 11.2% 3.4% at 50.8% 13.7%,
+    #000 0 88%,
+    transparent 100%
+  );
+}
+
+.expressionMouthLayer {
+  z-index: 5;
+  clip-path: ellipse(5.8% 2% at 50.8% 17.4%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 5.8% 2% at 50.8% 17.4%,
+    #000 0 86%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 5.8% 2% at 50.8% 17.4%,
+    #000 0 86%,
+    transparent 100%
+  );
+}
+
+.expressionBridgeLayer {
+  z-index: 6;
+  clip-path: ellipse(11.2% 3.4% at 50.8% 13.7%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 11.2% 3.4% at 50.8% 13.7%,
+    #000 0 88%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 11.2% 3.4% at 50.8% 13.7%,
+    #000 0 88%,
+    transparent 100%
+  );
+  transform: translateY(0.055%);
+}
+
+.expressionEnter .expressionToneLayer {
+  animation: chie-expression-tone-in 320ms ease-out both;
+}
+
+.expressionEnter .expressionEyesLayer {
+  animation: chie-expression-feature-in 180ms ease-out 140ms both;
+}
+
+.expressionEnter .expressionMouthLayer {
+  animation: chie-expression-feature-in 240ms ease-out 80ms both;
+}
+
+.expressionEnter .expressionBridgeLayer {
+  animation: chie-expression-bridge-in 320ms linear both;
+}
+
+.expressionHold .expressionToneLayer {
+  opacity: 0.32;
+}
+
+.expressionHold .expressionEyesLayer,
+.expressionHold .expressionMouthLayer {
+  opacity: 1;
+}
+
+.expressionHold .expressionBridgeLayer {
+  opacity: 0;
+}
+
+.expressionExit .expressionToneLayer {
+  animation: chie-expression-tone-out 360ms ease-in both;
+}
+
+.expressionExit .expressionEyesLayer,
+.expressionExit .expressionMouthLayer {
+  animation: chie-expression-feature-out 360ms ease-in both;
+}
+
+.expressionExit .expressionBridgeLayer {
+  animation: chie-expression-bridge-out 360ms linear both;
+}
+
+.model[data-reaction-name='annoyed'] .expressionGroup {
+  transform: translateX(0.115%);
+}
+
+.model[data-reaction-name='shy'] .expressionGroup {
+  transform: translate(0.115%, -0.083%);
+}
+
+.model[data-reaction-name='alert'] .expressionGroup {
+  transform: translateX(0.26%);
 }
 
 .expressionLayer {
@@ -97,7 +233,19 @@
 }
 
 .blinkLayer {
-  z-index: 5;
+  z-index: 7;
+  clip-path: ellipse(11.2% 3.4% at 50.8% 13.7%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 11.2% 3.4% at 50.8% 13.7%,
+    #000 0 90%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 11.2% 3.4% at 50.8% 13.7%,
+    #000 0 90%,
+    transparent 100%
+  );
+  transform: translateY(0.055%);
 }
 
 .hairLayer {
@@ -113,7 +261,7 @@
     transparent 0 93%,
     #000 100%
   );
-  opacity: 0.34;
+  opacity: 0.14;
   transform-origin: 51% 7%;
   animation: chie-hair-lag 5.6s ease-in-out infinite;
 }
@@ -121,9 +269,128 @@
 .shirtLayer {
   z-index: 3;
   clip-path: polygon(16% 19.5%, 83% 19.5%, 77% 49%, 22% 49%);
-  opacity: 0.17;
+  opacity: 0.065;
   transform-origin: 50% 29%;
   animation: chie-cloth-lag 4.8s ease-in-out infinite;
+}
+
+.seatedScene {
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.seatedFrame {
+  z-index: 2;
+  transform-box: border-box;
+}
+
+.seatedChairStatic {
+  z-index: 2;
+  clip-path: polygon(
+    22% 24%,
+    79% 24%,
+    79% 94%,
+    66% 94%,
+    66% 58%,
+    34% 58%,
+    34% 94%,
+    22% 94%
+  );
+}
+
+.seatedUpperStatic {
+  z-index: 4;
+  clip-path: inset(0 0 38% 0);
+}
+
+.seatedLeg {
+  z-index: 3;
+  will-change: transform;
+}
+
+.seatedLegLeft {
+  clip-path: polygon(
+    36.5% 58%,
+    50% 58%,
+    47.5% 91%,
+    35.5% 91%
+  );
+  transform-origin: 44.2% 61.1%;
+  transform:
+    translateX(-0.86%)
+    rotate(1.04deg)
+    scale(0.95, 0.874);
+}
+
+.seatedLegRight {
+  clip-path: polygon(
+    49% 58%,
+    62.5% 58%,
+    64% 92%,
+    50.5% 92%
+  );
+  transform-origin: 54.7% 61.1%;
+  transform:
+    translateX(0)
+    rotate(0)
+    scale(1, 1);
+}
+
+.seatedBlinkLayer {
+  z-index: 6;
+  clip-path: ellipse(11% 3.2% at 50.8% 16%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 11% 3.2% at 50.8% 16%,
+    #000 0 90%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 11% 3.2% at 50.8% 16%,
+    #000 0 90%,
+    transparent 100%
+  );
+  transform: translateY(-0.055%);
+}
+
+.holoTransition {
+  z-index: 7;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 7px,
+      rgba(229, 202, 246, 0.2) 7px 8px
+    ),
+    radial-gradient(
+      ellipse 34% 47% at 50% 51%,
+      rgba(190, 137, 216, 0.13),
+      transparent 72%
+  );
+  opacity: 0;
+  -webkit-mask-image: radial-gradient(
+    ellipse 36% 49% at 50% 51%,
+    #000 35%,
+    transparent 76%
+  );
+  mask-image: radial-gradient(
+    ellipse 36% 49% at 50% 51%,
+    #000 35%,
+    transparent 76%
+  );
+  pointer-events: none;
+}
+
+.holoTransition span {
+  position: absolute;
+  left: 12%;
+  top: 8%;
+  width: 76%;
+  height: 2px;
+  background: var(--chie-holo-line);
+  box-shadow:
+    0 0 8px var(--chie-holo-line),
+    0 0 22px var(--chie-holo);
 }
 
 .ambientGlow {
@@ -192,6 +459,87 @@
   transform: rotate(-1deg);
 }
 
+.chairContactShadow {
+  left: 21%;
+  top: 92.45%;
+  width: 61%;
+  height: 1.15%;
+  background: rgba(40, 27, 43, 0.29);
+  filter: blur(2.5px);
+  opacity: 0;
+}
+
+.model:not([data-idle-phase='standing']) .rearFootShadow,
+.model:not([data-idle-phase='standing']) .frontFootShadow {
+  opacity: 0;
+}
+
+.model[data-idle-phase='chair-in'] .standingScene {
+  animation: chie-standing-switch-out 720ms linear both;
+}
+
+.model[data-idle-phase='chair-in'] .seatedScene {
+  animation: chie-seated-switch-in 720ms linear both;
+}
+
+.model[data-idle-phase='seated'] .standingScene {
+  opacity: 0;
+}
+
+.model[data-idle-phase='seated'] .seatedScene {
+  opacity: 1;
+}
+
+.model[data-idle-phase='seated'] .seatedLegLeft {
+  animation:
+    chie-leg-left-interpolate
+    1500ms
+    cubic-bezier(0.37, 0, 0.63, 1)
+    6
+    alternate
+    both;
+}
+
+.model[data-idle-phase='seated'] .seatedLegRight {
+  animation:
+    chie-leg-right-interpolate
+    1500ms
+    cubic-bezier(0.37, 0, 0.63, 1)
+    6
+    alternate
+    both;
+}
+
+.model[data-idle-phase='chair-out'] .standingScene {
+  animation: chie-standing-switch-in 720ms linear both;
+}
+
+.model[data-idle-phase='chair-out'] .seatedScene {
+  animation: chie-seated-switch-out 720ms linear both;
+}
+
+.model[data-idle-phase='chair-in'] .chairContactShadow {
+  animation: chie-chair-shadow-in 720ms ease-out both;
+}
+
+.model[data-idle-phase='seated'] .chairContactShadow {
+  opacity: 1;
+}
+
+.model[data-idle-phase='chair-out'] .chairContactShadow {
+  animation: chie-chair-shadow-out 720ms ease-in both;
+}
+
+.model[data-idle-phase='chair-in'] .holoTransition,
+.model[data-idle-phase='chair-out'] .holoTransition {
+  animation: chie-holo-flash 720ms ease-in-out both;
+}
+
+.model[data-idle-phase='chair-in'] .holoTransition span,
+.model[data-idle-phase='chair-out'] .holoTransition span {
+  animation: chie-holo-scan 720ms cubic-bezier(0.35, 0, 0.2, 1) both;
+}
+
 .hitZones {
   z-index: 8;
   pointer-events: none;
@@ -244,6 +592,29 @@
   top: 20%;
   width: 48%;
   height: 76%;
+}
+
+.seatedInterruptZone {
+  position: absolute;
+  z-index: 9;
+  inset: 4% 8% 4%;
+  appearance: none;
+  padding: 0;
+  border: 0;
+  border-radius: 42%;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.seatedInterruptZone:disabled {
+  pointer-events: none;
+}
+
+.seatedInterruptZone:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
 }
 
 .dialogue {
@@ -435,6 +806,8 @@
   --chie-panel-border: rgba(255, 255, 255, 0.11);
   --chie-panel-shadow: rgba(0, 0, 0, 0.42);
   --chie-orbit: rgba(212, 99, 110, 0.4);
+  --chie-holo: rgba(217, 169, 238, 0.56);
+  --chie-holo-line: rgba(250, 237, 255, 0.88);
 }
 
 :global(html[data-theme='dark']) .baseSprite {
@@ -485,6 +858,213 @@
   }
   60% {
     transform: scaleY(1.0011);
+  }
+}
+
+@keyframes chie-standing-switch-out {
+  0%,
+  42% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  48% {
+    opacity: 0;
+    filter: brightness(1.32) saturate(0.75);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes chie-expression-tone-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.32;
+  }
+}
+
+@keyframes chie-expression-feature-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes chie-expression-tone-out {
+  from {
+    opacity: 0.32;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes chie-expression-feature-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes chie-expression-bridge-in {
+  0% {
+    opacity: 0;
+  }
+  28% {
+    opacity: 0.48;
+  }
+  42%,
+  62% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes chie-expression-bridge-out {
+  0%,
+  28% {
+    opacity: 0;
+  }
+  48%,
+  68% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes chie-seated-switch-in {
+  0%,
+  51% {
+    opacity: 0;
+  }
+  52% {
+    opacity: 1;
+    filter: brightness(1.28) saturate(0.8);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+@keyframes chie-seated-switch-out {
+  0%,
+  42% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  48% {
+    opacity: 0;
+    filter: brightness(1.3) saturate(0.78);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes chie-standing-switch-in {
+  0%,
+  51% {
+    opacity: 0;
+  }
+  52% {
+    opacity: 1;
+    filter: brightness(1.28) saturate(0.8);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+@keyframes chie-leg-left-interpolate {
+  from {
+    transform:
+      translateX(-0.86%)
+      rotate(1.04deg)
+      scale(0.95, 0.874);
+  }
+  to {
+    transform:
+      translateX(-0.86%)
+      rotate(0)
+      scale(1, 1);
+  }
+}
+
+@keyframes chie-leg-right-interpolate {
+  from {
+    transform:
+      translateX(0)
+      rotate(0)
+      scale(1, 1);
+  }
+  to {
+    transform:
+      translateX(0)
+      rotate(-1.6deg)
+      scale(0.9, 0.813);
+  }
+}
+
+@keyframes chie-chair-shadow-in {
+  0%,
+  48% {
+    opacity: 0;
+    transform: scaleX(0.72);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes chie-chair-shadow-out {
+  0%,
+  38% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scaleX(0.72);
+  }
+}
+
+@keyframes chie-holo-flash {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  24%,
+  68% {
+    opacity: 0.66;
+  }
+  48% {
+    opacity: 0.92;
+  }
+}
+
+@keyframes chie-holo-scan {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(var(--chie-widget-height) * 0.84));
   }
 }
 
@@ -560,7 +1140,9 @@
   .lookLayer,
   .collapseButton,
   .avatarButton,
-  .dialogue {
+  .dialogue,
+  .standingScene,
+  .seatedScene {
     transition: none;
   }
 
@@ -571,10 +1153,41 @@
   .breathLayer,
   .hairLayer,
   .shirtLayer,
+  .seatedLegLeft,
+  .seatedLegRight,
+  .expressionPart,
+  .holoTransition,
+  .holoTransition span,
   .ambientGlow,
   .avatarButton,
   .avatarOrbit,
   .statusMark {
     animation: none;
+  }
+
+  .expressionEnter .expressionToneLayer,
+  .expressionHold .expressionToneLayer {
+    opacity: 0.32;
+  }
+
+  .expressionEnter .expressionEyesLayer,
+  .expressionEnter .expressionMouthLayer,
+  .expressionHold .expressionEyesLayer,
+  .expressionHold .expressionMouthLayer {
+    opacity: 1;
+  }
+
+  .expressionExit .expressionPart {
+    opacity: 0;
+  }
+
+  .seatedScene,
+  .holoTransition,
+  .chairContactShadow {
+    display: none;
+  }
+
+  .standingScene {
+    opacity: 1;
   }
 }
