@@ -108,7 +108,7 @@ const config = {
           items: [
             { label: 'Blog', to: '/blog' },
             { label: 'Project', to: '/project' },
-            { label: 'Dashboard', to: '/dashboard' },
+            // { label: 'Dashboard', to: '/dashboard' },
           ],
         },
         {
