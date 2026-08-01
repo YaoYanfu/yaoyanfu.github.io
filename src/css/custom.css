@@ -578,6 +578,32 @@ article[itemprop="blogPost"]:hover {
   pointer-events: none;
 }
 
+/* ── CHIE 膝上像适配：裁掉腿部（底部 38%），从脚底放大 1.45×，
+   并整体下移把膝线推到底部边缘（clip 后的空洞被 translateY 补偿），
+   角色不再浮空，视觉上"从画面底部延伸出来"。
+   与桌面 widget bundle 解耦，桌面项目重新构建复制后此适配依然生效。 ── */
+.chie-widget .chie-model-frame {
+  clip-path: inset(0 0 38% 0);
+  transform: translateY(55.1%) scale(1.45);
+  transform-origin: 50% 100%;
+}
+
+/* 亮度主题化：白天模式整体调亮（亮背景上更协调），暗色模式保持原样 */
+.chie-widget[data-theme='light'] .chie-model-frame {
+  filter: brightness(0.95);
+}
+
+.chie-widget[data-theme='dark'] .chie-model-frame {
+  filter: brightness(0.88);
+}
+
+/* 坐姿/膝上像适配：对话框下移到头部上方附近（默认在 widget 顶部上方，
+   膝上放大后头部约在 widget 25% 处，气泡悬在头顶上方太远） */
+.chie-widget .chie-dialogue {
+  bottom: auto;
+  top: -8%;
+}
+
 /* Workaround for oh-my-live2d v0.19.3 rendering issue —
    some CDN builds of the pixi.js WebGL renderer produce a
    black canvas when the texture fails to decode in the first
