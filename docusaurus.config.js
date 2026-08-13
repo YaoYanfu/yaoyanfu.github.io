@@ -37,6 +37,7 @@ const config = {
 
   plugins: [
     mascotMode === 'live2d' ? './plugins/live2d-plugin' : null,
+    './plugins/blog-waterfall-plugin',
     [
       '@docusaurus/plugin-ideal-image',
       { quality: 80, max: 1440, steps: 3, disableInDev: true },

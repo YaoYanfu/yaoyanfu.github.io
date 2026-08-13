@@ -604,6 +604,85 @@ article[itemprop="blogPost"]:hover {
   top: -8%;
 }
 
+/* ── Blog Hero：CHIE 中央站位 ────────────────────────────
+   仅 /blog 页 Hero 激活期间生效（body 标记由 BlogHero 挂载/卸载时切换）。
+   1) 把 widget 从右下角搬到 Hero 中央并放大；
+   2) 重置膝上像裁切 → 全身像（优先级高于上面的 .chie-widget 规则）；
+   3) 对话框回到默认位置（头顶上方）；
+   4) 退场时与 Hero 同步淡出上移。 */
+body.blog-hero-active #chie-widget-root {
+  position: fixed;
+  left: 50%;
+  top: 56%;
+  right: auto;
+  bottom: auto;
+  width: min(340px, 34vw);
+  height: min(600px, 72vh);
+  transform: translate(-50%, -50%);
+  z-index: 510;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+body.blog-hero-active #chie-widget-root .chie-model-frame {
+  clip-path: none;
+  transform: none;
+  filter: brightness(0.92);
+}
+
+body.blog-hero-active #chie-widget-root .chie-dialogue {
+  display: none; /* Hero 里的千惠只做安静的瀑布守望者，不弹对话 */
+}
+
+/* Hero 退场：CHIE 与 Hero 同步淡出（BlogHero 切 exiting 时挂上） */
+body.blog-hero-exiting #chie-widget-root {
+  opacity: 0;
+  transform: translate(-50%, calc(-50% - 28px)) scale(1.03);
+  transition:
+    opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 768px) {
+  body.blog-hero-active #chie-widget-root {
+    width: min(220px, 46vw);
+    height: min(440px, 60vh);
+    top: 58%;
+  }
+}
+
+/* ── Hero → 列表 的连续揭示过渡 ────────────────────────
+   点击 CTA 时（BlogListPageWrapper 挂 blog-hero-reveal）：
+   文章逐篇上浮淡入（stagger 60ms），与 Hero 退场重叠，
+   视觉上"Hero 化为列表"，而非遮罩撤掉露出静止内容。 */
+@keyframes blogHeroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.blog-hero-reveal article {
+  opacity: 0;
+  animation: blogHeroFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--hero-i, 0) * 60ms);
+}
+
+.blog-hero-reveal article:nth-of-type(1) { --hero-i: 0; }
+.blog-hero-reveal article:nth-of-type(2) { --hero-i: 1; }
+.blog-hero-reveal article:nth-of-type(3) { --hero-i: 2; }
+.blog-hero-reveal article:nth-of-type(4) { --hero-i: 3; }
+.blog-hero-reveal article:nth-of-type(5) { --hero-i: 4; }
+.blog-hero-reveal article:nth-of-type(6) { --hero-i: 5; }
+.blog-hero-reveal article:nth-of-type(7) { --hero-i: 6; }
+.blog-hero-reveal article:nth-of-type(8) { --hero-i: 7; }
+.blog-hero-reveal article:nth-of-type(9) { --hero-i: 8; }
+.blog-hero-reveal article:nth-of-type(10) { --hero-i: 9; }
+
 /* Workaround for oh-my-live2d v0.19.3 rendering issue —
    some CDN builds of the pixi.js WebGL renderer produce a
    black canvas when the texture fails to decode in the first
