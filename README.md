@@ -1,6 +1,6 @@
 # Yves' Notebook
 
-我的个人知识站点，基于 [Docusaurus](https://docusaurus.io/) 构建。包含博客、笔记本和项目展示，主页右下角有 CHIE CSS 分层动画看板娘。
+我的个人知识站点，基于 [Docusaurus](https://docusaurus.io/) 构建。包含博客和项目展示，主页右下角有 CHIE CSS 分层动画看板娘。
 
 ## 技术栈
 
@@ -54,8 +54,6 @@ npm run build
 ```
 my-notebook/
 ├── docusaurus.config.js   站点配置（导航、主题、插件）
-├── sidebars.js            文档侧边栏
-├── docs/                  笔记本（Markdown/MDX）
 ├── blog/                  博客文章
 ├── src/
 │   ├── pages/             页面组件（首页、Project、Dashboard）

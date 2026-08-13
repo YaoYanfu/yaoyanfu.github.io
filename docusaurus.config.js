@@ -63,9 +63,6 @@ const config = {
     [
       'classic',
       {
-        docs: {
-          sidebarPath: './sidebars.js',
-        },
         blog: {
           showReadingTime: true,
           blogSidebarCount: 10,
