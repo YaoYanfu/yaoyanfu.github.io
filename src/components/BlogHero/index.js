@@ -16,7 +16,7 @@ const COPY = {
 
 // canvas 测量字体必须与绘制字体、加载字体完全一致
 const FONT = '19px "Inter", "Noto Sans SC", sans-serif';
-const LINE_HEIGHT = 30; // 瀑布行距(正文连排后收紧,更密集)
+const LINE_HEIGHT = 28; // 瀑布行距(正文连排后收紧,更密集)
 const SIDE_GAP = 22; // 文字与 CHIE 轮廓的避让间距
 const EDGE_PAD = 44; // 瀑布左右边距
 const SCROLL_SPEED = 30; // 瀑布流速 px/s
