@@ -35,7 +35,7 @@ function loadChieScript() {
   });
 }
 
-export default function ChieWidgetStandalone({position = 'bottom-right'}) {
+export default function ChieWidgetStandalone() {
   const {lang} = useLanguage();
   const initializedLangRef = useRef(null);
 
@@ -50,7 +50,6 @@ export default function ChieWidgetStandalone({position = 'bottom-right'}) {
           window.ChieWidget.init({
             assetsPath: '/img/chie/',
             lang,
-            position,
           });
           initializedLangRef.current = lang;
         }
@@ -66,7 +65,7 @@ export default function ChieWidgetStandalone({position = 'bottom-right'}) {
         initializedLangRef.current = null;
       }
     };
-  }, [lang, position]);
+  }, [lang]);
 
   return null;
 }
