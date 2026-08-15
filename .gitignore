@@ -40,3 +40,6 @@ pnpm-debug.log*
 
 # Project scratch files
 BLOG-HERO-DESIGN.md
+
+# Local architecture analysis
+/ARCHITECTURE.md
