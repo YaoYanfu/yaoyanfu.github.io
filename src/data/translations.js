@@ -1,5 +1,6 @@
 const t = {
   en: {
+    'sidebar.name': 'Yves Yao',
     'sidebar.tagline': 'Writing code, doing research, exploring AI, documenting life.',
     'nav.about': 'About',
     'nav.experience': 'Experience',
@@ -68,6 +69,7 @@ const t = {
     'dashboard.toast.deleteError': 'Failed to delete. Please try again later.',
   },
   zh: {
+    'sidebar.name': 'YaoYanfu',
     'sidebar.tagline': '写代码、搞科研、折腾AI、记录生活。',
     'nav.about': '关于',
     'nav.experience': '经历',

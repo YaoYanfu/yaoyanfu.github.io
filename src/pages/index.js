@@ -66,7 +66,7 @@ function Sidebar({ t }) {
         <div className={styles.avatarWrap}>
           <BlurImg className={styles.avatar} src={avatarUrl} alt="Yves Yao" />
         </div>
-        <h1 className={styles.sidebarName}>Yves Yao</h1>
+        <h1 className={styles.sidebarName}>{t('sidebar.name')}</h1>
         <p className={styles.sidebarTagline}>{t('sidebar.tagline')}</p>
         <nav className={styles.sidebarNav}>
           {nav.map(({ key, href }) => (
