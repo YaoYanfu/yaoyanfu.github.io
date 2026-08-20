@@ -24,6 +24,7 @@ desktop.ini
 # Agent / assistant workspaces
 .hermes/
 .agents/
+.zcode/
 
 # Editor & IDE
 .idea/
