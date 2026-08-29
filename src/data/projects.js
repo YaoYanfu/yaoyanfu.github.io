@@ -9,6 +9,15 @@ const projects = [
     status: 'WIP',
   },
   {
+    id: 'disease-identification',
+    title: '农作物病虫害识别（PlantVillage CNN）',
+    description: '端到端深度学习实践项目，从零训练 CNN 识别 PlantVillage 38 类作物病害，并通过 FastAPI + 原生前端提供本地推理服务。',
+    tags: ['Python', 'TensorFlow', 'CNN', 'FastAPI'],
+    github: 'https://github.com/YaoYanfu/disease-identification',
+    demo: null,
+    status: 'Active',
+  },
+  {
     id: 'shallowseek',
     title: 'XDwe',
     description: '西电教师增强型 AI 学习系统，基于 RAG 整合课程资源与知识流，支持智能问答与学习辅助。',
