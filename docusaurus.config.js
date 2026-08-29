@@ -85,7 +85,7 @@ const config = {
   themeConfig: {
     image: 'img/logo.png',
     colorMode: {
-      defaultMode: 'dark',
+      defaultMode: 'light',
       respectPrefersColorScheme: false,
       disableSwitch: false,
     },
