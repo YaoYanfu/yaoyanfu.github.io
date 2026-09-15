@@ -19,8 +19,8 @@ function IconX() { return (<svg viewBox="0 0 24 24" fill="currentColor" aria-hid
 const contacts = [
   { label: 'Email',   href: 'mailto:yvesyao0209@foxmail.com',                    Icon: IconEmail },
   { label: 'GitHub',  href: 'https://github.com/YaoYanfu',                Icon: IconGitHub },
-  { label: 'B站',     href: 'https://space.bilibili.com/286154288',       Icon: IconBilibili },
-  { label: '知乎',    href: 'https://www.zhihu.com/people/bxel8l',         Icon: IconZhihu },
+  { label: 'Bilibili',     href: 'https://space.bilibili.com/286154288',       Icon: IconBilibili },
+  { label: 'Zhihu',    href: 'https://www.zhihu.com/people/bxel8l',         Icon: IconZhihu },
   { label: 'X',       href: 'https://x.com/yao_yves15717',                Icon: IconX },
 ];
 

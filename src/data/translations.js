@@ -1,7 +1,7 @@
 const t = {
   en: {
     'sidebar.name': 'Yves Yao',
-    'sidebar.tagline': 'Writing code, doing research, exploring AI, documenting life.',
+    'sidebar.tagline': 'Sustained progress far outweighs the f**king talent and starting point.',
     'nav.about': 'About',
     'nav.experience': 'Experience',
     'nav.projects': 'Projects',
@@ -70,7 +70,7 @@ const t = {
   },
   zh: {
     'sidebar.name': 'YaoYanfu',
-    'sidebar.tagline': '写代码、搞科研、折腾AI、记录生活。',
+    'sidebar.tagline': '持之以恒的进步远大于所谓的天赋与起点.',
     'nav.about': '关于',
     'nav.experience': '经历',
     'nav.projects': '项目',
