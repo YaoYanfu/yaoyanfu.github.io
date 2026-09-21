@@ -521,7 +521,7 @@
   }
 
   /* The Docusaurus mobile menu already contains these site links. */
-  .sidebarNav > .navItem:nth-child(-n + 4) {
+  .sidebarNav > .navItem:nth-child(-n + 5) {
     display: none;
   }
 

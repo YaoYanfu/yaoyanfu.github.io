@@ -53,6 +53,7 @@ function Sidebar({ t }) {
     { key: 'nav.about',      href: '#about' },
     { key: 'nav.experience', href: '#experience' },
     { key: 'nav.projects',   href: '#projects' },
+    { key: 'nav.awards',     href: '#awards' },
   ];
 
   const linkItems = [
@@ -195,7 +196,27 @@ export default function Home() {
             <Link className={styles.viewAll} to="/project">{t('home.projects.viewAll')}</Link>
           </section>
 
-          {/* 4. Recent */}
+          {/* 4. Awards */}
+          <section className={styles.section} id="awards">
+            <h2 className={`${styles.sectionTitle} anim-fade-up`} data-marginalia="誉">{t('home.awards.title')}</h2>
+            <div className={styles.experienceList}>
+              <div className={`${styles.expItem} anim-fade-up anim-d1`}>
+                <div className={styles.expIconBox}>
+                  <ExpIcon icon="img/exp/Xidian.jpg" />
+                </div>
+                <div className={styles.expContent}>
+                  <div className={styles.expHeadRow}>
+                    <span className={styles.expHeading}>{t('home.awards.0.heading')}</span>
+                    <time className={styles.expTime} dateTime="2026-09-21">{t('home.awards.0.time')}</time>
+                  </div>
+                  <span className={styles.expSub}>{t('home.awards.0.sub')}</span>
+                  <p className={styles.expDesc}>{t('home.awards.0.desc')}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 5. Recent */}
           <section className={styles.section}>
             <h2 className={`${styles.sectionTitle} anim-fade-up`} data-marginalia="近">{t('home.recent.title')}</h2>
             <div className={styles.recentGrid}>
