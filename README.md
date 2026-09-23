@@ -4,7 +4,6 @@
 以及一个纯前端实现的 CHIE 看板娘。站点为全静态产物，部署在 GitHub Pages。
 
 - 在线地址：<https://yaoyanfu.github.io/>
-- 架构细节（数据流、状态机、已知技术债）：见 [ARCHITECTURE.md](./ARCHITECTURE.md)
 
 ## 技术栈
 
@@ -86,8 +85,9 @@ node --test --test-isolation=none src/components/ChieWidgetStandalone/seated.tes
 - **降级**：`prefers-reduced-motion: reduce` 下不启动物理循环与坐姿切换；视口宽度 ≤ 1023 px 时整体隐藏。
 - **命中区域**：头、脸、全身三个按钮，带 `aria-label`，点击触发对应表情与台词。
 
-修改素材文件名或表情映射：`src/data/chieMascot.js`。
-修改物理参数、台词与时间：`src/components/ChieWidgetStandalone/index.js` 与 `seated.js`。
+修改素材文件名或命中区域映射：`src/data/chieMascot.js`。
+修改物理参数、台词与时间：`src/components/ChieWidgetStandalone/index.js` 与 `seated.js`
+（对白字典是组件内的 `COPY`；`data/chieMascot.js` 里的 `CHIE_COPY` 已不被首页使用）。
 
 ### 看板娘模式
 
@@ -140,7 +140,7 @@ npm run build
 ```
 mypage/
 ├── docusaurus.config.js              站点装配：导航、主题、插件、MASCOT_MODE
-├── ARCHITECTURE.md                   架构说明与已知技术债
+├── ARCHITECTURE.md                   架构说明与已知技术债（本地分析文档，已被 .gitignore 忽略）
 ├── blog/                             博客文章、authors.yml、tags.yml
 ├── plugins/live2d-plugin/            构建期注入 Live2D CDN 加载脚本
 ├── src/
