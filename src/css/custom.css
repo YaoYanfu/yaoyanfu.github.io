@@ -581,14 +581,14 @@ article[itemprop="blogPost"]:hover {
 /* ── CHIE 膝上像适配：裁掉腿部（底部 38%），从脚底放大 1.45×，
    并整体下移把膝线推到底部边缘（clip 后的空洞被 translateY 补偿），
    角色不再浮空，视觉上"从画面底部延伸出来"。
-   与桌面 widget bundle 解耦，桌面项目重新构建复制后此适配依然生效。 ── */
+   主页显示尺寸独立于角色的站立/坐下动画。 ── */
 .chie-widget .chie-model-frame {
   clip-path: inset(0 0 38% 0);
   transform: translateY(55.1%) scale(1.45);
   transform-origin: 50% 100%;
 }
 
-/* 亮度主题化：白天模式整体调亮（亮背景上更协调），暗色模式保持原样 */
+/* 两种姿态统一的主题亮度：浅色背景略降亮度，深色背景进一步降低。 */
 .chie-widget[data-theme='light'] .chie-model-frame {
   filter: brightness(0.95);
 }

@@ -1,0 +1,275 @@
+.chie-widget {
+  --chie-widget-height: clamp(380px, 52vh, 520px);
+  --chie-head-offset: 0%;
+  --chie-seated-offset: -2.65%;
+  --chie-standing-opacity: 1;
+  --chie-seated-opacity: 0;
+  position: fixed;
+  z-index: 90;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(0px, env(safe-area-inset-bottom));
+  width: 240px;
+  height: var(--chie-widget-height);
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.chie-model-frame {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  aspect-ratio: 867 / 1815;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.chie-character,
+.chie-bodies,
+.chie-standing-body,
+.chie-seated-body,
+.chie-shared-head,
+.chie-sprite,
+.chie-hit-zones {
+  position: absolute;
+  inset: 0;
+}
+
+.chie-character {
+  transform: rotate(var(--chie-body-rotate, 0deg));
+  transform-origin: 50% 94.75%;
+}
+
+.chie-sprite {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* Add the complementary body weights in an isolated group, so the middle of
+   the dissolve stays opaque instead of revealing the page through the shirt. */
+.chie-bodies {
+  isolation: isolate;
+}
+
+.chie-standing-body,
+.chie-seated-body {
+  mix-blend-mode: plus-lighter;
+}
+
+/* Hide the heads baked into both body sprites. The overlap is below the hair,
+   where the shared head fades into the neck; it never covers the eyes/mouth. */
+.chie-standing-body {
+  opacity: var(--chie-standing-opacity);
+  transform: translateY(var(--chie-head-offset));
+  mask-image: linear-gradient(to bottom, transparent 0 21.2%, #000 21.8%);
+}
+
+.chie-seated-body {
+  opacity: var(--chie-seated-opacity);
+  transform: translateY(var(--chie-seated-offset));
+  mask-image: linear-gradient(to bottom, transparent 0 23.85%, #000 24.45%);
+  /* Match the brighter seated clothing/skin to the standing artwork once.
+     Facial actions use the shared head and never change this color treatment. */
+  filter: brightness(0.96) contrast(1.015);
+}
+
+.chie-shared-head {
+  z-index: 2;
+  transform: translateY(var(--chie-head-offset));
+  mask-image: linear-gradient(to bottom, #000 0 21.8%, transparent 24.3%);
+}
+
+/* Eye-only blink masks keep cheeks, nose, mouth and hair pixel-stable. */
+.chie-blink {
+  z-index: 2;
+  opacity: 0;
+  mask-image:
+    radial-gradient(ellipse 4.3% 1.55% at 45.4% 14%, #000 0 80%, transparent 100%),
+    radial-gradient(ellipse 4.3% 1.55% at 56.3% 14%, #000 0 80%, transparent 100%);
+  transform: translateY(0.055%);
+  transition: opacity 45ms linear;
+}
+
+.chie-shared-head[data-blinking='true'] .chie-blink {
+  opacity: 1;
+}
+
+.chie-expression {
+  z-index: 1;
+  opacity: 0;
+  mask-image:
+    radial-gradient(ellipse 5.2% 2.7% at 45.4% 13.6%, #000 0 80%, transparent 100%),
+    radial-gradient(ellipse 5.2% 2.7% at 56.3% 13.6%, #000 0 80%, transparent 100%),
+    radial-gradient(ellipse 2.6% 1.15% at 50.8% 17.1%, #000 0 70%, transparent 100%);
+  transition: opacity 160ms ease;
+}
+
+.chie-expression-active {
+  opacity: 1;
+}
+
+.chie-seated-chair {
+  clip-path: polygon(22% 24%, 79% 24%, 79% 94%, 66% 94%, 66% 58%, 34% 58%, 34% 94%, 22% 94%);
+}
+
+.chie-seated-upper {
+  z-index: 2;
+  clip-path: inset(0 0 39.5% 0);
+}
+
+.chie-seated-leg-left,
+.chie-seated-leg-right {
+  z-index: 1;
+  mask-image: linear-gradient(to bottom, transparent 0 58.4%, #000 61.1%);
+  animation: chie-leg-sway 3200ms ease-in-out infinite alternate;
+}
+
+.chie-seated-leg-left {
+  clip-path: polygon(36% 56.5%, 50% 56.5%, 47.5% 91%, 35.5% 91%);
+  transform-origin: 43.5% 60.8%;
+}
+
+.chie-seated-leg-right {
+  clip-path: polygon(48.5% 56.5%, 62.5% 56.5%, 64% 92%, 50.5% 92%);
+  transform-origin: 54.7% 60.8%;
+  animation-delay: -1600ms;
+  animation-duration: 3600ms;
+}
+
+.chie-seated-knee {
+  z-index: 3;
+  clip-path: inset(56.6% 31.5% 36.4%);
+  mask-image: linear-gradient(to bottom, transparent 57%, #000 58.8% 61.4%, transparent 63.3%);
+}
+
+@keyframes chie-leg-sway {
+  from { transform: rotate(-0.45deg); }
+  to { transform: rotate(0.45deg); }
+}
+
+.chie-hit-zones {
+  z-index: 8;
+  transform: translateY(var(--chie-head-offset));
+}
+
+.chie-hit-zone {
+  position: absolute;
+  appearance: none;
+  padding: 0;
+  border: 0;
+  border-radius: 42%;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.chie-hit-zone:focus-visible {
+  outline: 2px solid #e6a7d9;
+  outline-offset: 3px;
+}
+
+.chie-zone-head {
+  z-index: 3;
+  left: 29%;
+  top: 1.5%;
+  width: 43%;
+  height: 20%;
+}
+
+.chie-zone-face {
+  z-index: 4;
+  left: 39%;
+  top: 10%;
+  width: 23%;
+  height: 10%;
+}
+
+.chie-zone-figure {
+  z-index: 2;
+  left: 27%;
+  top: 20%;
+  width: 48%;
+  height: 76%;
+}
+
+.chie-dialogue {
+  position: absolute;
+  z-index: 12;
+  right: 0;
+  bottom: calc(100% + 12px);
+  width: 236px;
+  padding: 11px 13px 12px 15px;
+  overflow: hidden;
+  border: 1px solid rgba(26, 26, 28, 0.13);
+  border-radius: 4px 10px 10px 4px;
+  background: rgba(250, 250, 248, 0.94);
+  box-shadow: 0 14px 36px rgba(26, 21, 28, 0.16);
+  backdrop-filter: blur(14px) saturate(120%);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 180ms ease, visibility 180ms ease, transform 180ms ease;
+}
+
+.chie-dialogue::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(135deg, #9d3742, #b54957);
+}
+
+.chie-dialogue-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.chie-dialogue-name {
+  display: block;
+  color: #9d3742;
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.chie-dialogue p {
+  margin: 5px 0 0;
+  color: #1a1a1c;
+  font-size: 0.83rem;
+  line-height: 1.55;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.chie-widget[data-theme='dark'] .chie-dialogue {
+  border-color: rgba(255, 255, 255, 0.11);
+  background: rgba(17, 19, 24, 0.92);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.42);
+}
+
+.chie-widget[data-theme='dark'] .chie-dialogue::before {
+  background: linear-gradient(135deg, #d4636e, #de7e87);
+}
+
+.chie-widget[data-theme='dark'] .chie-dialogue-name { color: #d4636e; }
+.chie-widget[data-theme='dark'] .chie-dialogue p { color: #f4f4f4; }
+
+@media (max-width: 1023px) {
+  .chie-widget { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chie-character { transform: none; }
+  .chie-seated-part { animation: none; }
+}
