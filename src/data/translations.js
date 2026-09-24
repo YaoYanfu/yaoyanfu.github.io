@@ -1,7 +1,7 @@
 const t = {
   en: {
     'sidebar.name': 'Yves Yao',
-    'sidebar.tagline': 'Sustained progress far outweighs the f**king talent and starting point.',
+    'sidebar.tagline': 'Sustained progress matters far more than f**king talent or where you started.',
     'nav.about': 'About',
     'nav.experience': 'Experience',
     'nav.projects': 'Projects',
