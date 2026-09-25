@@ -3,7 +3,7 @@ import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import { useTranslation } from '@site/src/context/LanguageContext';
+import { useLanguage, useTranslation } from '@site/src/context/LanguageContext';
 import ChieWidgetStandalone from '@site/src/components/ChieWidgetStandalone';
 
 import styles from './index.module.css';
@@ -42,12 +42,24 @@ function BlurImg({ className, src, alt = '' }) {
 
 /* ── Sidebar ── */
 
+/* Latin parts of the name get their own type treatment, so a mixed CJK + Latin
+   name doesn’t fall back to a CJK face for “Yves”, and the “/” can sit back. */
+function SidebarName({ text }) {
+  return text.split(/([A-Za-z][A-Za-z\s]*|\/)/).filter(Boolean).map((part, i) => {
+    if (!part.trim()) return part;
+    if (/[A-Za-z]/.test(part)) return <span key={i} className={styles.sidebarNameEn}>{part}</span>;
+    if (part === '/') return <span key={i} className={styles.sidebarNameSlash}>/</span>;
+    return part;
+  });
+}
+
 function ExpIcon({ icon }) {
   const src = useBaseUrl(icon);
   return <BlurImg className={styles.expIcon} src={src} />;
 }
 
 function Sidebar({ t }) {
+  const { lang } = useLanguage();
   const avatarUrl = useBaseUrl('img/avatar.png');
   const nav = [
     { key: 'nav.about',      href: '#about' },
@@ -67,7 +79,7 @@ function Sidebar({ t }) {
         <div className={styles.avatarWrap}>
           <BlurImg className={styles.avatar} src={avatarUrl} alt="Yves Yao" />
         </div>
-        <h1 className={styles.sidebarName}>{t('sidebar.name')}</h1>
+        <h1 lang={lang} className={`${styles.sidebarName}${lang === 'zh' ? ` ${styles.sidebarNameZh}` : ''}`}><SidebarName text={t('sidebar.name')} /></h1>
         <p className={styles.sidebarTagline}>{t('sidebar.tagline')}</p>
         <nav className={styles.sidebarNav}>
           {nav.map(({ key, href }) => (

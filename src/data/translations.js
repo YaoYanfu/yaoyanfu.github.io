@@ -1,6 +1,6 @@
 const t = {
   en: {
-    'sidebar.name': 'Yves Yao',
+    'sidebar.name': 'Yanfu Yao / Yves',
     'sidebar.tagline': 'Sustained progress matters far more than f**king talent or where you started.',
     'nav.about': 'About',
     'nav.experience': 'Experience',
@@ -75,7 +75,7 @@ const t = {
     'dashboard.toast.deleteError': 'Failed to delete. Please try again later.',
   },
   zh: {
-    'sidebar.name': 'YaoYanfu',
+    'sidebar.name': '姚焱夫 / Yves',
     'sidebar.tagline': '持之以恒的进步远大于所谓的天赋与起点.',
     'nav.about': '关于',
     'nav.experience': '经历',
