@@ -45,7 +45,7 @@ export function useTranslation() {
   return useMemo(() => {
     const dict = TR[lang] || TR.en;
     return (key, vars) => {
-      let s = dict[key] || key;
+      let s = dict[key] ?? key;
       if (vars) Object.entries(vars).forEach(([k, v]) => { s = s.replace(`{${k}}`, v); });
       return s;
     };

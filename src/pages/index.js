@@ -183,7 +183,7 @@ export default function Home() {
                   <div className={styles.expContent}>
                     <div className={styles.expHeadRow}>
                       <span className={styles.expHeading}>{e.heading}</span>
-                      <span className={styles.expTime}>{e.time}</span>
+                      {e.time && <span className={styles.expTime}>{e.time}</span>}
                     </div>
                     <span className={styles.expSub}>{e.sub}</span>
                     <p className={styles.expDesc}>{e.desc}</p>
