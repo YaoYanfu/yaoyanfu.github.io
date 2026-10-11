@@ -4,11 +4,11 @@ export const CHIE_ASSETS = {
   shy: 'chie-v2-shy.webp',
   alert: 'chie-v2-alert.webp',
   blink: 'chie-v2-blink.webp',
-  avatar: 'chie-v2-avatar.webp',
   seatedA: 'chie-v2-seated-a.webp',
-  seatedB: 'chie-v2-seated-b.webp',
-  seatedBlink: 'chie-v2-seated-blink.webp',
 };
+
+// 文件仍保留在 static/img/chie/，只是当前没有任何代码引用，未来可复用：
+// chie-v2-avatar.webp、chie-v2-seated-b.webp、chie-v2-seated-blink.webp
 
 export const CHIE_REACTIONS = {
   head: {
@@ -22,44 +22,5 @@ export const CHIE_REACTIONS = {
   figure: {
     emotion: 'annoyed',
     message: 'figure',
-  },
-};
-
-export const CHIE_COPY = {
-  zh: {
-    name: '千惠 / CHIE',
-    alt: '千惠，黑色短发、粉紫色眼睛、穿香芋紫宽松上衣的 AI 看板娘',
-    messages: {
-      greeting: '看什么看？系统监控一切正常……你该不会又在偷懒吧？',
-      head: '别乱摸啊！发型都被你弄乱了！',
-      face: '一直盯着我看干嘛，我脸上写着代码吗？',
-      figure: '别乱碰。再这样，我就把你的进程挂起。',
-    },
-    actions: {
-      collapse: '收起千惠',
-      expand: '展开千惠',
-      greet: '和千惠打招呼',
-      head: '摸摸千惠的头发',
-      face: '点击千惠的脸',
-      figure: '和千惠互动',
-    },
-  },
-  en: {
-    name: 'CHIE / 千惠',
-    alt: 'Chie, an AI site companion with short black hair, pink-lilac eyes, and an oversized lilac top',
-    messages: {
-      greeting: "What are you staring at? All systems are normal... You haven't been slacking off again, have you?",
-      head: "Hey—don't touch my hair! You messed it up.",
-      face: 'Why are you staring? Is there code written on my face?',
-      figure: "Hands off. Keep that up and I'll suspend your process.",
-    },
-    actions: {
-      collapse: 'Minimize Chie',
-      expand: 'Expand Chie',
-      greet: 'Say hello to Chie',
-      head: "Pat Chie's hair",
-      face: "Tap Chie's face",
-      figure: 'Interact with Chie',
-    },
   },
 };

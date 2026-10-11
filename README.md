@@ -56,7 +56,6 @@ node --test --test-isolation=none src/components/ChieWidgetStandalone/seated.tes
 | `/blog` | 博客列表，含归档、标签、作者页与 RSS/Atom |
 | `/project` | 完整项目列表，数据源为 `src/data/projects.js` |
 | `/dashboard` | Supabase 留言板。路由仍会构建，但导航入口已隐藏 |
-| `/chie-preview` | CHIE 内部预览原型页，不在导航中，带 `noindex,nofollow` |
 | `/search` | 本地搜索，由插件提供 |
 
 ## 双语与主题
@@ -86,8 +85,11 @@ node --test --test-isolation=none src/components/ChieWidgetStandalone/seated.tes
 - **命中区域**：头、脸、全身三个按钮，带 `aria-label`，点击触发对应表情与台词。
 
 修改素材文件名或命中区域映射：`src/data/chieMascot.js`。
-修改物理参数、台词与时间：`src/components/ChieWidgetStandalone/index.js` 与 `seated.js`
-（对白字典是组件内的 `COPY`；`data/chieMascot.js` 里的 `CHIE_COPY` 已不被首页使用）。
+修改物理参数、台词与时间：`src/components/ChieWidgetStandalone/index.js`（对白字典是组件内的 `COPY`）
+与 `seated.js`。
+
+CHIE 全站只有这一套实现。`static/img/chie/` 下有 3 张未被任何代码引用的素材
+（`chie-v2-avatar`、`chie-v2-seated-b`、`chie-v2-seated-blink`），文件保留备用，不在 `CHIE_ASSETS` 中。
 
 ### 看板娘模式
 
@@ -105,9 +107,6 @@ npm run start
 ```
 
 这是构建期选择，不是发布后可动态修改的设置，切换后必须重新构建。未知值会静默回退到 `chie`。
-
-> `/chie-preview` 使用的是另一套独立的 React 原型（`src/components/ChieMascot/`），带情绪调试按钮，
-> 与首页生产实现互不影响。`src/components/HomeChieMascot/` 为已不再引用的历史实现。
 
 ## 内容维护
 
@@ -146,14 +145,12 @@ mypage/
 ├── src/
 │   ├── components/
 │   │   ├── ChieWidgetStandalone/     首页 CHIE 看板娘（含 seated.js 坐姿状态机与单测）
-│   │   ├── ChieMascot/               /chie-preview 使用的原型实现
-│   │   ├── HomeChieMascot/           历史实现，当前未被引用
 │   │   └── LanguageToggle/           导航栏 EN / 中文切换
 │   ├── context/LanguageContext.js    语言状态与 t() 翻译函数
 │   ├── css/custom.css                全局设计令牌与主题覆盖
 │   ├── data/                         translations / projects / chieMascot 数据
 │   ├── lib/supabase.js               留言板 REST 客户端
-│   ├── pages/                        index、project、dashboard、chie-preview
+│   ├── pages/                        index、project、dashboard
 │   └── theme/                        Root 与 NavbarItem 扩展点
 └── static/
     └── img/                          头像、经历/获奖 Logo、博客配图、chie/ 精灵图
