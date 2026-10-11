@@ -3,6 +3,7 @@ title: 我的大一
 authors: [yves]
 tags: [生活, 随笔]
 date: 2026-06-01
+section: article
 ---
 
 ![千惠](/img/blog/blog千惠图标.jpg)

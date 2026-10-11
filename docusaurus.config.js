@@ -37,6 +37,7 @@ const config = {
 
   plugins: [
     mascotMode === 'live2d' ? './plugins/live2d-plugin' : null,
+    './plugins/blog-nav-plugin',
     [
       '@docusaurus/plugin-ideal-image',
       { quality: 80, max: 1440, steps: 3, disableInDev: true },
@@ -65,8 +66,9 @@ const config = {
         docs: false,
         blog: {
           showReadingTime: true,
-          blogSidebarCount: 10,
-          blogSidebarTitle: 'Recent Posts',
+          // 侧边栏由 blog-nav-plugin + src/theme/BlogSidebar 接管，这里放开数据范围，
+          // 避免框架自带的「最近 N 篇」限制漏掉分类内容；展示数量由前端控制。
+          blogSidebarCount: 'ALL',
           feedOptions: {
             type: ['rss', 'atom'],
             xslt: true,

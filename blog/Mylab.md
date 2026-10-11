@@ -3,6 +3,7 @@ title: Mylab
 authors: [yves]
 tags: [记录, 生活, 随笔]
 date: 2026-07-11
+section: essay
 ---
 
 ## 就在今天，我创立了自己的Lab

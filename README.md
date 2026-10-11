@@ -53,7 +53,7 @@ node --test --test-isolation=none src/components/ChieWidgetStandalone/seated.tes
 | 路由 | 内容 |
 | --- | --- |
 | `/` | 首页：About、Experience、Projects、Awards、Recent 与状态面板，右下角挂载 CHIE |
-| `/blog` | 博客列表，含归档、标签、作者页与 RSS/Atom |
+| `/blog` | 博客列表，含侧边栏（随笔 / 文章 / 专栏）、归档、标签、作者页与 RSS/Atom |
 | `/project` | 完整项目列表，数据源为 `src/data/projects.js` |
 | `/dashboard` | Supabase 留言板。路由仍会构建，但导航入口已隐藏 |
 | `/search` | 本地搜索，由插件提供 |
@@ -121,6 +121,43 @@ npm run start
 `blog/authors.yml`、`blog/tags.yml` 中声明（未声明只会告警，不影响构建）。图片放在
 `static/img/blog/` 并以 `/img/blog/...` 引用。
 
+侧边栏分「随笔 / 文章 / 专栏」三个板块，板块由 front matter 的 `section` 决定，省略时默认是随笔：
+
+```yaml
+---
+title: 我的大一
+authors: [yves]
+tags: [生活]
+date: 2026-06-01
+section: article       # essay / article / column，省略即 essay
+---
+```
+
+专栏文章还要用 `column` 指向已在 `src/data/blogColumns.js` 登记的专栏 id：
+
+```yaml
+---
+title: 具身智能笔记 01
+authors: [yves]
+tags: [具身智能]
+date: 2026-10-01
+section: column
+column: embodied-intelligence
+---
+```
+
+新增专栏先改 `src/data/blogColumns.js`，按登记顺序展示，名称与简介都要写中英文：
+
+```js
+{id: 'embodied-intelligence', name: {zh: '具身智能', en: 'Embodied Intelligence'},
+ description: {zh: '围绕具身智能的持续记录。', en: 'Ongoing notes on embodied intelligence.'}}
+```
+
+分类写错、专栏文章漏写 `column`、`column` 指向未登记的专栏、非专栏文章误写 `column`，
+都会在构建时报错并指出具体是哪个文件；已登记但还没有文章的专栏，展开后显示「暂无文章」。
+侧边栏的展示规则（每个板块最新 5 篇 +「查看全部」、专栏两级展开、展开状态记在 `sessionStorage`）
+集中在 `src/theme/BlogSidebar/Content/navViewState.js`，分类校验在 `plugins/blog-nav-plugin/`。
+
 **新增页面**：在 `src/pages/<name>.js` 创建即可映射到 `/<name>`；使用 `@theme/Layout` 获得统一导航与页脚，
 局部样式放在相邻的 `*.module.css`，全局令牌才写入 `src/css/custom.css`。
 
@@ -141,17 +178,19 @@ mypage/
 ├── docusaurus.config.js              站点装配：导航、主题、插件、MASCOT_MODE
 ├── ARCHITECTURE.md                   架构说明与已知技术债（本地分析文档，已被 .gitignore 忽略）
 ├── blog/                             博客文章、authors.yml、tags.yml
-├── plugins/live2d-plugin/            构建期注入 Live2D CDN 加载脚本
+├── plugins/
+│   ├── blog-nav-plugin/              校验文章分类并生成侧边栏导航数据
+│   └── live2d-plugin/                构建期注入 Live2D CDN 加载脚本
 ├── src/
 │   ├── components/
 │   │   ├── ChieWidgetStandalone/     首页 CHIE 看板娘（含 seated.js 坐姿状态机与单测）
 │   │   └── LanguageToggle/           导航栏 EN / 中文切换
 │   ├── context/LanguageContext.js    语言状态与 t() 翻译函数
 │   ├── css/custom.css                全局设计令牌与主题覆盖
-│   ├── data/                         translations / projects / chieMascot 数据
+│   ├── data/                         translations / projects / chieMascot / blogColumns 数据
 │   ├── lib/supabase.js               留言板 REST 客户端
 │   ├── pages/                        index、project、dashboard
-│   └── theme/                        Root 与 NavbarItem 扩展点
+│   └── theme/                        Root、NavbarItem 与 BlogSidebar 扩展点
 └── static/
     └── img/                          头像、经历/获奖 Logo、博客配图、chie/ 精灵图
 ```

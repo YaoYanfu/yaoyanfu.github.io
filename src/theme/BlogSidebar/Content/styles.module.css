@@ -1,0 +1,177 @@
+/**
+ * 博客侧边栏导航样式
+ *
+ * 排版尺度沿用框架原生侧边栏（0.9rem 正文、h3 级板块标题），颜色全部走站点设计令牌
+ * （--site-* / --ifm-*），因此自动跟随明暗主题；缩进按层级递进：板块正文一级、
+ * 专栏名称一级、专栏文章的标题二级。
+ */
+
+.nav {
+  font-size: 0.9rem;
+}
+
+/* 桌面：跟随页面滚动，并限制在视口内 */
+.navDesktop {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 2rem);
+  max-height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
+  overflow-y: auto;
+}
+
+/* 手机：渲染在导航栏二级菜单面板里，不需要 sticky */
+.navMobile {
+  padding: 0.5rem 1rem 1.5rem;
+}
+
+.section {
+  margin-bottom: 1.75rem;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+/* 板块标题：比文章标题略重、略大，颜色用主文本色；专栏入口是同一个外观的一整行按钮 */
+.sectionHeading {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: var(--site-text-primary);
+}
+
+/* 专栏入口与专栏名称都是一整行按钮，外观跟上面的板块标题保持一致 */
+.headingButton,
+.rowButton {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rowButton {
+  font-weight: 500;
+  color: var(--ifm-font-color-base);
+}
+
+.headingButton:hover,
+.rowButton:hover {
+  color: var(--ifm-color-primary);
+}
+
+.headingButton:focus-visible,
+.rowButton:focus-visible,
+.moreButton:focus-visible,
+.postLink:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.rowLabel {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.chevron {
+  flex: none;
+  font-size: 1.05em;
+  line-height: 1;
+  color: var(--site-text-muted);
+  transition: transform 0.18s ease;
+}
+
+.chevronOpen {
+  transform: rotate(90deg);
+}
+
+/* 板块正文的一级缩进 */
+.body {
+  padding-left: 0.75rem;
+}
+
+.empty {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: var(--site-text-muted);
+}
+
+.emptyNested {
+  padding-left: 1.5rem;
+}
+
+.columnList,
+.postList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 专栏文章相对专栏名称再递进一级 */
+.postListNested {
+  padding-left: 1.5rem;
+}
+
+.columnItem,
+.postItem {
+  margin-top: 0.7rem;
+}
+
+.postLink {
+  display: block;
+  color: var(--ifm-font-color-base);
+  overflow-wrap: anywhere;
+}
+
+.postLink:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.postLinkActive {
+  font-weight: 600;
+  color: var(--ifm-color-primary);
+}
+
+.moreButton {
+  margin-top: 0.7rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--site-text-secondary);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.moreButton:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: underline;
+}
+
+@media (max-width: 996px) {
+  .navDesktop {
+    display: none;
+  }
+}
+
+/* 手机端每行间距略大，便于点按 */
+.navMobile .columnItem,
+.navMobile .postItem {
+  margin-top: 0.85rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}
