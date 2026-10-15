@@ -1,0 +1,133 @@
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-family: var(--ifm-heading-font-family);
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.75rem;
+  color: var(--accent-text);
+}
+
+.subtitle,
+.outputNote {
+  color: var(--site-text-muted);
+  line-height: 1.8;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.researchCard {
+  padding: 1.75rem;
+  border: 1px solid var(--card-border);
+  border-left: 3px solid var(--accent-text);
+  border-radius: 12px;
+  background: var(--card-bg);
+  scroll-margin-top: 90px;
+}
+
+.researchCard + .researchCard {
+  margin-top: 1.5rem;
+}
+
+.status {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-text);
+  margin-bottom: 0.75rem;
+}
+
+.researchTitle {
+  font-size: 1.35rem;
+  line-height: 1.5;
+  margin-bottom: 0.9rem;
+}
+
+.description,
+.focusList,
+.publication p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--site-text-secondary);
+}
+
+.focusTitle {
+  font-size: 0.9rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.focusList {
+  padding-left: 1.25rem;
+  margin: 0;
+}
+
+.focusList li + li {
+  margin-top: 0.3rem;
+}
+
+.tags,
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+  color: var(--accent-text);
+}
+
+.outputs {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--divider-color);
+}
+
+.outputNote {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.publication + .publication {
+  margin-top: 2rem;
+}
+
+.publication h3 {
+  font-size: 1.1rem;
+}
+
+.publication p {
+  margin-bottom: 0.4rem;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 2rem 1rem;
+    overflow-wrap: anywhere;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .researchCard {
+    padding: 1.25rem 1rem;
+  }
+}

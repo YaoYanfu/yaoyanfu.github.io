@@ -2,9 +2,14 @@ import { useMemo, useRef, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { usePluginData } from '@docusaurus/useGlobalData';
 import Layout from '@theme/Layout';
 import { useLanguage, useTranslation } from '@site/src/context/LanguageContext';
 import ChieWidgetStandalone from '@site/src/components/ChieWidgetStandalone';
+import projects from '@site/src/data/projects';
+import research from '@site/src/data/research';
+import updates from '@site/src/data/updates';
+import formatDate from '@site/src/lib/formatDate';
 
 import styles from './index.module.css';
 
@@ -63,9 +68,11 @@ function Sidebar({ t }) {
   const avatarUrl = useBaseUrl('img/avatar.png');
   const nav = [
     { key: 'nav.about',      href: '#about' },
-    { key: 'nav.experience', href: '#experience' },
+    { key: 'nav.research',   href: '#research' },
     { key: 'nav.projects',   href: '#projects' },
+    { key: 'nav.experience', href: '#experience' },
     { key: 'nav.awards',     href: '#awards' },
+    { key: 'nav.recent',     href: '#recent' },
   ];
 
   const linkItems = [
@@ -81,13 +88,15 @@ function Sidebar({ t }) {
         </div>
         <h1 lang={lang} className={`${styles.sidebarName}${lang === 'zh' ? ` ${styles.sidebarNameZh}` : ''}`}><SidebarName text={t('sidebar.name')} /></h1>
         <p className={styles.sidebarTagline}>{t('sidebar.tagline')}</p>
-        <nav className={styles.sidebarNav}>
-          {nav.map(({ key, href }) => (
-            <a key={key} className={styles.navItem} href={href}>{t(key)}</a>
-          ))}
-          {linkItems.map(({ key, href }) => (
-            <Link key={key} className={styles.navItem} to={href}>{t(key)}</Link>
-          ))}
+        <nav className={styles.sidebarNav} aria-label={t('nav.profile')}>
+          <div className={styles.sectionLinks}>
+            {nav.map(({ key, href }) => (
+              <a key={key} className={`${styles.navItem} ${styles.sectionNavItem}`} href={href}>{t(key)}</a>
+            ))}
+            {linkItems.map(({ key, href }) => (
+              <Link key={key} className={`${styles.navItem} ${styles.sectionNavItem}`} to={href}>{t(key)}</Link>
+            ))}
+          </div>
           <span className={styles.navDivider} />
           {contacts.map(({ label, href, Icon }) => (
             <a key={label} className={styles.navItem} href={href} target="_blank" rel="noopener noreferrer">
@@ -105,15 +114,16 @@ function Sidebar({ t }) {
 
 function StatusPanel({ t }) {
   const statusKeys = [
+    ['home.status.currentResearch', 'home.status.currentResearchVal'],
     ['home.status.nowBuilding',  'home.status.nowBuildingVal'],
-    ['home.status.currentFocus', 'home.status.currentFocusVal'],
-    ['home.status.latestPost',   'home.status.latestPostVal'],
-    ['home.status.projectPulse', 'home.status.projectPulseVal'],
   ];
 
   return (
     <div className={styles.statusPanel}>
-      <div className={styles.panelHeader}><span className={styles.statusDot}/><span>{t('home.status.header')}</span></div>
+      <div className={styles.panelHeader}>
+        <span className={styles.panelLabel}><span className={styles.statusDot}/>{t('home.status.header')}</span>
+        <span className={styles.panelUpdated}>{t('home.status.updated')}</span>
+      </div>
       <div className={styles.statusList}>
         {statusKeys.map(([lk, vk]) => (
           <div className={styles.statusRow} key={lk}><span>{t(lk)}</span><strong>{t(vk)}</strong></div>
@@ -127,6 +137,8 @@ function StatusPanel({ t }) {
 
 export default function Home() {
   const t = useTranslation();
+  const {lang} = useLanguage();
+  const {latestPost} = usePluginData('blog-nav-plugin');
   const {siteConfig} = useDocusaurusContext();
   const showChie = siteConfig.customFields?.mascotMode === 'chie';
 
@@ -144,14 +156,11 @@ export default function Home() {
     return items;
   }, [t]);
 
-  const projects = useMemo(() => [0, 1, 2].map(i => ({
-    meta: t(`home.projects.${i}.meta`),
-    name: t(`home.projects.${i}.name`),
-    desc: t(`home.projects.${i}.desc`),
-  })), [t]);
+  const selectedProjects = projects.filter((project) => project.featured);
+  const currentResearch = research[0];
 
   return (
-    <Layout title="Yves Yao" description={t('sidebar.tagline')}>
+    <Layout title="Yves Yao" description={t('home.description')}>
       <div
         className={`${styles.wrapper}${
           showChie ? ` ${styles.wrapperWithMascot}` : ''
@@ -171,7 +180,43 @@ export default function Home() {
             <div className={styles.statusWrap}><StatusPanel t={t} /></div>
           </section>
 
-          {/* 2. Experience */}
+          {/* 2. Current research */}
+          <section className={styles.section} id="research">
+            <h2 className={`${styles.sectionTitle} anim-fade-up`} data-marginalia="研">{t('home.research.title')}</h2>
+            <article className={`${styles.researchCard} anim-fade-up anim-d1`}>
+              <span className={styles.researchStatus}>{t(`research.status.${currentResearch.status}`)}</span>
+              <h3 className={styles.researchName}>{currentResearch.title[lang]}</h3>
+              <p className={styles.bodyText}>{currentResearch.description[lang]}</p>
+              <ul className={styles.researchTags} aria-label={t('home.research.title')}>
+                {currentResearch.tags.map((tag) => <li key={tag}>{tag}</li>)}
+              </ul>
+              <Link className={styles.viewAll} to={`/research#${currentResearch.id}`}>{t('home.research.viewAll')} →</Link>
+            </article>
+          </section>
+
+          {/* 3. Projects */}
+          <section className={styles.section} id="projects">
+            <h2 className={`${styles.sectionTitle} anim-fade-up`} data-marginalia="作">{t('home.projects.title')}</h2>
+            <div className={styles.projectList}>
+              {selectedProjects.map((p, i) => (
+                <article className={`${styles.projectCard} anim-fade-up anim-d${i + 1}`} key={p.id}>
+                  <span className={styles.projectMeta}>{p.category[lang]}</span>
+                  <h3 className={styles.projectName}>
+                    <Link to={`/project#${p.id}`}>{p.title[lang]}</Link>
+                  </h3>
+                  {p.role && <p className={styles.projectRole}>{p.role[lang]}</p>}
+                  <p className={styles.projectDesc}>{p.description[lang]}</p>
+                  <div className={styles.projectLinks}>
+                    <Link to={`/project#${p.id}`}>{t('home.projects.details')} <span aria-hidden="true">→</span></Link>
+                    {p.github && <a href={p.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <Link className={styles.viewAll} to="/project">{t('home.projects.viewAll')}</Link>
+          </section>
+
+          {/* 4. Experience */}
           <section className={styles.section} id="experience">
             <h2 className={`${styles.sectionTitle} anim-fade-up`} data-marginalia="历">{t('home.experience.title')}</h2>
             <div className={styles.experienceList}>
@@ -193,22 +238,7 @@ export default function Home() {
             </div>
           </section>
 
-          {/* 3. Projects */}
-          <section className={styles.section} id="projects">
-            <h2 className={`${styles.sectionTitle} anim-fade-up`} data-marginalia="作">{t('home.projects.title')}</h2>
-            <div className={styles.projectList}>
-              {projects.map((p, i) => (
-                <article className={`${styles.projectCard} anim-fade-up anim-d${i + 1}`} key={p.name}>
-                  <span className={styles.projectMeta}>{p.meta}</span>
-                  <h3 className={styles.projectName}>{p.name}</h3>
-                  <p className={styles.projectDesc}>{p.desc}</p>
-                </article>
-              ))}
-            </div>
-            <Link className={styles.viewAll} to="/project">{t('home.projects.viewAll')}</Link>
-          </section>
-
-          {/* 4. Awards */}
+          {/* 5. Awards */}
           <section className={styles.section} id="awards">
             <h2 className={`${styles.sectionTitle} anim-fade-up`} data-marginalia="誉">{t('home.awards.title')}</h2>
             <div className={styles.experienceList}>
@@ -228,21 +258,27 @@ export default function Home() {
             </div>
           </section>
 
-          {/* 5. Recent */}
-          <section className={styles.section}>
+          {/* 6. Recent updates and the latest public blog post */}
+          <section className={styles.section} id="recent">
             <h2 className={`${styles.sectionTitle} anim-fade-up`} data-marginalia="近">{t('home.recent.title')}</h2>
-            <div className={styles.recentGrid}>
-              <Link to="/blog" className={`${styles.linkCard} anim-fade-up anim-d1`}>
-                <span className={styles.linkCardLabel}>{t('home.recent.blog.label')}</span>
-                <strong className={styles.linkCardTitle}>{t('home.recent.blog.title')}</strong>
-                <p className={styles.linkCardDesc}>{t('home.recent.blog.desc')}</p>
+            <ul className={styles.updatesList}>
+              {updates.map((update) => (
+                <li key={update.id} className={styles.updateItem}>
+                  <time dateTime={update.date}>{formatDate(update.date, lang)}</time>
+                  <p>{update.text[lang]}</p>
+                </li>
+              ))}
+            </ul>
+            {latestPost && (
+              <Link to={latestPost.permalink} className={`${styles.linkCard} anim-fade-up anim-d1`}>
+                <span className={styles.linkCardLabel}>
+                  {t('home.recent.blog.label')}
+                  {latestPost.date && <time dateTime={latestPost.date}>{formatDate(latestPost.date, lang)}</time>}
+                </span>
+                <strong className={styles.linkCardTitle}>{latestPost.title}</strong>
+                <span className={styles.readPost}>{t('home.recent.blog.read')} <span aria-hidden="true">→</span></span>
               </Link>
-              {/* <Link to="/dashboard" className={`${styles.linkCard} anim-fade-up anim-d2`}>
-                <span className={styles.linkCardLabel}>{t('home.recent.dashboard.label')}</span>
-                <strong className={styles.linkCardTitle}>{t('home.recent.dashboard.title')}</strong>
-                <p className={styles.linkCardDesc}>{t('home.recent.dashboard.desc')}</p>
-              </Link> */}
-            </div>
+            )}
           </section>
 
         </main>

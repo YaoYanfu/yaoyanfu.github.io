@@ -212,6 +212,8 @@ function toNavPost(post, columnsById) {
       title: metadata.title ?? source,
       permalink: metadata.permalink,
       unlisted: Boolean(metadata.unlisted),
+      date: metadata.date,
+      description: metadata.description,
     },
   };
 }
@@ -247,6 +249,7 @@ export default function blogNavPlugin() {
 
       setGlobalData({
         sections,
+        latestPost: navPosts.find((post) => !post.item.unlisted)?.item ?? null,
         columns: columns.map(({id, name, description, posts}) => ({
           id,
           name,

@@ -51,7 +51,7 @@ const config = {
   headTags: [
     { tagName: 'link', attributes: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
     { tagName: 'link', attributes: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' } },
-    { tagName: 'link', attributes: { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,500;1,14..32,600&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Fraunces:opsz,wght,SOFT@9..144,400..700,0..100&family=Noto+Sans+SC:wght@400;500;600;700&display=swap' } },
+    { tagName: 'link', attributes: { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,500;1,14..32,600&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Fraunces:opsz,wght,SOFT@9..144,400..700,0..100&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap' } },
   ],
 
   i18n: {
@@ -94,8 +94,9 @@ const config = {
     navbar: {
       title: 'Yves Yao',
       items: [
-        {to: '/', label: 'Home', position: 'left'},
+        {to: '/', label: 'Home', position: 'left', exact: true},
         {to: '/blog', label: 'Blog', position: 'left'},
+        {to: '/research', label: 'Research', position: 'left'},
         {to: '/project', label: 'Project', position: 'left'},
         // {to: '/dashboard', label: 'Dashboard', position: 'left'},
         { type: 'custom-languageToggle', position: 'right' },
@@ -107,6 +108,7 @@ const config = {
           title: 'Nav',
           items: [
             { label: 'Blog', to: '/blog' },
+            { label: 'Research', to: '/research' },
             { label: 'Project', to: '/project' },
             // { label: 'Dashboard', to: '/dashboard' },
           ],

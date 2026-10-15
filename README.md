@@ -1,6 +1,6 @@
 # Yves' Notebook
 
-我的个人知识站点，基于 [Docusaurus](https://docusaurus.io/) 构建：首页个人档案、项目展示、博客，
+我的个人知识站点，基于 [Docusaurus](https://docusaurus.io/) 构建：首页个人档案、研究、项目展示、博客，
 以及一个纯前端实现的 CHIE 看板娘。站点为全静态产物，部署在 GitHub Pages。
 
 - 在线地址：<https://yaoyanfu.github.io/>
@@ -15,7 +15,7 @@
 | 内容 | Docusaurus Blog + MDX | `blog/` 下的 Markdown 自动生成列表、归档、标签、作者页与 RSS/Atom |
 | 搜索 | `@easyops-cn/docusaurus-search-local` | 构建期索引博客与页面（不含文档） |
 | 代码高亮 | prism-react-renderer | GitHub / Dracula 明暗双主题 |
-| 字体 | Google Fonts | Inter（正文）、Fraunces（标题）、Noto Sans SC（中文） |
+| 字体 | Google Fonts / 系统字体 | Inter（正文）、Fraunces（标题）、Noto Sans SC（中文正文）、Noto Serif SC（中文姓名）、Times New Roman（英文姓名） |
 | 看板娘 | 自研 React 组件 | CSS 精灵图分层 + JavaScript 弹簧动画，不依赖第三方 CDN |
 | 留言板（可选） | Supabase REST | 浏览器直连 PostgREST，路由为 `/dashboard` |
 
@@ -52,9 +52,10 @@ node --test --test-isolation=none src/components/ChieWidgetStandalone/seated.tes
 
 | 路由 | 内容 |
 | --- | --- |
-| `/` | 首页：About、Experience、Projects、Awards、Recent 与状态面板，右下角挂载 CHIE |
+| `/` | 首页：About、Current Research、Selected Projects、Experience、Awards、Recent，右下角挂载 CHIE |
 | `/blog` | 博客列表，含侧边栏（随笔 / 文章 / 专栏）、归档、标签、作者页与 RSS/Atom |
 | `/project` | 完整项目列表，数据源为 `src/data/projects.js` |
+| `/research` | 在研工作与论文 / 研究资料，数据源为 `src/data/research.js` |
 | `/dashboard` | Supabase 留言板。路由仍会构建，但导航入口已隐藏 |
 | `/search` | 本地搜索，由插件提供 |
 
@@ -113,9 +114,30 @@ npm run start
 **首页文案与经历**：`src/data/translations.js`。经历条目按 `home.experience.{i}.*` 的数字索引连续读取，
 遇到缺失的 key 即停止渲染，因此新增经历必须保证索引连续，且 `en`、`zh` 两份字典都要补齐。
 
-**项目列表**：完整列表改 `src/data/projects.js`（字段 `id / title / description / tags / github / demo / status`，
-`status` 支持 `Active`、`WIP`、`Archived`）；首页精选的三个项目另在 `translations.js` 的
-`home.projects.0..2.*` 中维护，两处需同步修改。
+**当前研究**：首页和 `/research` 共用 `src/data/research.js` 的默认导出。标题、简介与研究关注使用
+中英文对象，`tags` 为关键词，`links` 为已公开材料。研究起始日期、导师、实验室和成果材料
+仅在确认后添加。该文件的 `publications` 数组用于后续挂论文，字段为
+`id / title / authors / venue / year / links`；每个链接使用 `{label: {zh, en}, href}`。
+未添加成果时仅显示后续更新说明。
+
+**项目列表**：首页和完整项目页共用 `src/data/projects.js`。`title / category / description` 使用
+`{zh, en}` 双语对象，`role` 可选；`featured: true` 表示首页精选。其余字段为
+`id / tags / github / demo / status`，`status` 支持 `Active`、`WIP`、`Archived`。
+`id` 同时作为项目页锚点，首页详情链接自动指向 `/project#<id>`。未提供公开地址时将
+`github`、`demo` 留为 `null`，不会生成无效外链。XDU-Zhixing 和 XDWe 是独立条目。
+
+项目页每张卡片使用原生折叠交互，点击卡面或使用 Enter / Space 展开，展开后占满一行。
+从首页通过 `/project#<id>` 进入时自动展开对应卡片。`details` 为可选的双语详情段落数组，
+每段包含 `id / title / paragraphs / items`；`resources` 用于附加链接，使用
+`{label: {zh, en}, href}`。`closedSource: true` 的项目标注闭源并省略外链。
+目前 Zhixing 和 CHIE 有完整详情，其余项目展开后展示已有链接。
+
+**近期动态**：`src/data/updates.js`，按日期从新到旧维护，`text` 使用 `{zh, en}` 双语对象。
+日期表示事件发生或近况记录的日期，不据此推断项目开始时间。动态速览的更新时间在
+`translations.js` 的 `home.status.updated` 中维护。
+
+**最新博客**：首页通过 `blog-nav-plugin` 自动读取最新的公开文章标题、日期和实际文章链接，
+不再手写文章信息；正文保持原文语言。
 
 **博客**：在 `blog/` 新增 Markdown/MDX，front matter 中的 `authors` 与 `tags` 需已在
 `blog/authors.yml`、`blog/tags.yml` 中声明（未声明只会告警，不影响构建）。图片放在

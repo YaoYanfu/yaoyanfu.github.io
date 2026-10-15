@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import TR from '@site/src/data/translations';
 
 const STORAGE_KEY = 'site_language';
@@ -18,7 +18,11 @@ const LanguageContext = createContext({
 });
 
 export function LanguageProvider({ children }) {
-  const [lang, setLangState] = useState(getInitialLang);
+  // Match the static HTML on the first render, then restore the saved language.
+  const [lang, setLangState] = useState('en');
+  useEffect(() => {
+    setLangState(getInitialLang());
+  }, []);
 
   const setLang = useCallback((l) => {
     setLangState(l);
