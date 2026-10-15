@@ -32,13 +32,28 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  /*
+   * The rail is pinned for the whole page height, so its content must never
+   * spill past this fixed 100vh box onto the footer below. Clip the outer rail;
+   * the identity block stays put and only .sidebarNav scrolls internally.
+   */
+  overflow: hidden;
 }
 
 .sidebarInner {
   display: flex;
   flex-direction: column;
   flex: 1;
+  /* min-height:0 lets the flex children shrink below their content height. */
+  min-height: 0;
   padding-bottom: 2rem;
+}
+
+/* Avatar, name and tagline keep their size; .sidebarNav is the only part that
+   gives up space, so a short viewport scrolls the links instead of squashing
+   (or spilling) the identity block. */
+.sidebarInner > :not(.sidebarNav) {
+  flex-shrink: 0;
 }
 
 /* Avatar wrap — square with subtle rounding */
@@ -113,7 +128,12 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-bottom: auto;
+  /* Takes the height left over below the pinned identity block and scrolls
+     internally when the viewport is too short to show every link. */
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .navItem {
@@ -496,6 +516,7 @@
     height: auto;
     position: static;
     padding-top: 1.5rem;
+    overflow: visible;
   }
 
   .sidebarInner {
@@ -545,6 +566,8 @@
     gap: 6px;
     width: 100%;
     margin: 0.75rem 0 0;
+    /* Mobile renders as a static, wrapping row — no internal scroll. */
+    overflow-y: visible;
   }
 
   /* The Docusaurus mobile menu already contains these site links. */
