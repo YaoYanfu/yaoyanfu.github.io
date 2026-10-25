@@ -14,7 +14,7 @@
 | 构建 | Rspack（`@docusaurus/faster`） | 加速打包 |
 | 内容 | Docusaurus Blog + MDX | `blog/` 下的 Markdown 自动生成列表、归档、标签、作者页与 RSS/Atom |
 | 搜索 | `@easyops-cn/docusaurus-search-local` | 构建期索引博客与页面（不含文档） |
-| 代码高亮 | prism-react-renderer | GitHub / Dracula 明暗双主题 |
+| 代码高亮 | prism-react-renderer | GitHub 亮色主题 |
 | 字体 | Google Fonts / 系统字体 | Inter（正文）、Fraunces（标题）、Noto Sans SC（中文正文）、Noto Serif SC（中文姓名）、Times New Roman（英文姓名） |
 | 看板娘 | 自研 React 组件 | CSS 精灵图分层 + JavaScript 弹簧动画，不依赖第三方 CDN |
 | 留言板（可选） | Supabase REST | 浏览器直连 PostgREST，路由为 `/dashboard` |
@@ -66,7 +66,8 @@ node --test --test-isolation=none src/components/ChieWidgetStandalone/seated.tes
 `src/theme/NavbarItem/ComponentTypes.js` 注册的 `custom-languageToggle` 渲染。
 因此切换语言只影响显式使用 `t()` 的自定义 UI，不会改变 URL、博客正文或 `<html lang>`。
 
-明暗主题由 Docusaurus color mode 管理，默认亮色、不跟随系统；`data-theme` 同时被看板娘读取以同步配色。
+站点只提供亮色主题：`colorMode` 固定 `light` 并设置 `disableSwitch: true`，导航栏不渲染明暗切换按钮，
+也不跟随系统深色设置；`custom.css` 只保留亮色设计令牌，看板娘与页面共用同一套配色。
 全站设计令牌定义在 `src/css/custom.css`（`--site-*`、`--accent-*` 等）。
 
 ## CHIE 看板娘

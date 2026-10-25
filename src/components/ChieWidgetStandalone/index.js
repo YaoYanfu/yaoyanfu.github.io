@@ -48,7 +48,6 @@ export default function ChieWidgetStandalone() {
   const {lang} = useLanguage();
   const copy = COPY[lang] || COPY.en;
   const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState('light');
   const [reducedMotion, setReducedMotion] = useState(false);
   const [faceReady, setFaceReady] = useState(false);
   const [blinking, setBlinking] = useState(false);
@@ -61,21 +60,11 @@ export default function ChieWidgetStandalone() {
 
   useEffect(() => {
     setMounted(true);
-    const dark = window.matchMedia('(prefers-color-scheme: dark)');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const syncTheme = () => setTheme(
-      document.documentElement.dataset.theme || (dark.matches ? 'dark' : 'light'),
-    );
     const syncMotion = () => setReducedMotion(reduced.matches);
-    const observer = new MutationObserver(syncTheme);
-    observer.observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
-    dark.addEventListener('change', syncTheme);
     reduced.addEventListener('change', syncMotion);
-    syncTheme();
     syncMotion();
     return () => {
-      observer.disconnect();
-      dark.removeEventListener('change', syncTheme);
       reduced.removeEventListener('change', syncMotion);
     };
   }, []);
@@ -191,7 +180,7 @@ export default function ChieWidgetStandalone() {
   if (!mounted) return null;
 
   return createPortal(
-    <div id="chie-widget-root" className="chie-widget" data-theme={theme} ref={rootRef}>
+    <div id="chie-widget-root" className="chie-widget" ref={rootRef}>
       <div className={`chie-dialogue${message ? ' chie-dialogue-visible' : ''}`} role="status" aria-live="polite">
         <span className="chie-dialogue-name">{copy.name}</span>
         <p>{message ? copy[message.key] : ''}</p>

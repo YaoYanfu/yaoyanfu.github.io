@@ -87,9 +87,10 @@ const config = {
   themeConfig: {
     image: 'img/logo.png',
     colorMode: {
+      // 站点只提供亮色主题：固定 light、关闭导航栏明暗切换、不跟随系统。
       defaultMode: 'light',
       respectPrefersColorScheme: false,
-      disableSwitch: false,
+      disableSwitch: true,
     },
     navbar: {
       title: 'Yves Yao',
@@ -127,7 +128,6 @@ const config = {
     },
     prism: {
       theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
     },
   },
 };

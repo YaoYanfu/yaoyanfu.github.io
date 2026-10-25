@@ -1,8 +1,8 @@
 /* ============================================
-   Yves' Page — Dual-theme Design System
+   Yves' Page — Light Theme Design System
    ============================================ */
 
-/* ── Shared / Light (default) — cool neutral, deep crimson accent ── */
+/* ── Light theme — cool neutral, deep crimson accent ── */
 :root {
   --ifm-color-primary: #9d3742;
   --ifm-color-primary-dark: #832d37;
@@ -96,70 +96,6 @@
   navigation: auto;
 }
 
-/* ── Dark theme overrides — same crimson, lighter shade ── */
-[data-theme='dark'] {
-  --ifm-color-primary: #d4636e;
-  --ifm-color-primary-dark: #c64a57;
-  --ifm-color-primary-darker: #b03a47;
-  --ifm-color-primary-darkest: #882d37;
-  --ifm-color-primary-light: #de7e87;
-  --ifm-color-primary-lighter: #e69399;
-  --ifm-color-primary-lightest: #f0bcc0;
-
-  --ifm-background-color: #08090c;
-  --ifm-background-surface-color: #111318;
-  --ifm-navbar-background-color: rgba(8, 9, 12, 0.84);
-  --ifm-footer-background-color: #08090c;
-  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.06);
-
-  --ifm-font-color-base: #f4f4f4;
-  --ifm-font-color-secondary: rgba(244, 244, 244, 0.72);
-  --ifm-link-color: #d4636e;
-  --ifm-link-hover-color: #e69399;
-  --ifm-navbar-link-color: rgba(244, 244, 244, 0.72);
-  --ifm-navbar-link-hover-color: #f4f4f4;
-  --ifm-menu-color: rgba(244, 244, 244, 0.7);
-  --ifm-menu-color-active: #f4f4f4;
-  --ifm-toc-link-color: rgba(244, 244, 244, 0.62);
-  --ifm-breadcrumb-color-active: #f4f4f4;
-  --ifm-table-border-color: rgba(255, 255, 255, 0.08);
-  --ifm-hr-border-color: rgba(255, 255, 255, 0.08);
-
-  --site-bg: #08090c;
-  --site-bg-surface: #111318;
-  --site-text-primary: #f4f4f4;
-  --site-text-secondary: rgba(244, 244, 244, 0.74);
-  --site-text-muted: rgba(244, 244, 244, 0.46);
-  --site-border-subtle: rgba(255, 255, 255, 0.08);
-  --site-border-hover: rgba(255, 255, 255, 0.14);
-  --site-surface-soft: rgba(255, 255, 255, 0.045);
-  --site-surface-hover: rgba(255, 255, 255, 0.07);
-  --site-accent-start: #d4636e;
-  --site-accent-mid: #de7e87;
-  --site-accent-end: #e69399;
-
-  --accent-subtle: rgba(212, 99, 110, 0.10);
-  --accent-soft: rgba(212, 99, 110, 0.16);
-  --accent-glow: rgba(212, 99, 110, 0.20);
-  --accent-glow-strong: rgba(212, 99, 110, 0.30);
-  --accent-text: #d4636e;
-  --accent-text-hover: #e69399;
-  --accent-text-light: #de7e87;
-  --accent-gradient: linear-gradient(135deg, #d4636e, #de7e87);
-  --accent-gradient-hover: linear-gradient(135deg, #de7e87, #e69399);
-  --accent-blockquote: linear-gradient(180deg, #d4636e, #e69399);
-
-  --glass-bg: rgba(255, 255, 255, 0.045);
-  --glass-border: rgba(255, 255, 255, 0.09);
-  --glass-hover: rgba(255, 255, 255, 0.07);
-  --card-bg: rgba(255, 255, 255, 0.03);
-  --card-border: rgba(255, 255, 255, 0.06);
-  --card-bg-hover: rgba(255, 255, 255, 0.05);
-  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --card-shadow-hover: 0 18px 48px rgba(0, 0, 0, 0.28), 0 4px 24px rgba(212, 99, 110, 0.12);
-  --divider-color: rgba(255, 255, 255, 0.06);
-}
-
 /* ── Global Reset & Base ── */
 html {
   scroll-behavior: smooth;
@@ -236,10 +172,6 @@ body {
   border-radius: 8px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   padding: 8px;
-}
-
-[data-theme='dark'] .dropdown__menu {
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .dropdown__link {
@@ -586,15 +518,8 @@ article[itemprop="blogPost"]:hover {
   clip-path: inset(0 0 38% 0);
   transform: translateY(55.1%) scale(1.45);
   transform-origin: 50% 100%;
-}
-
-/* 两种姿态统一的主题亮度：浅色背景略降亮度，深色背景进一步降低。 */
-.chie-widget[data-theme='light'] .chie-model-frame {
+  /* 略降亮度，让看板娘与亮色页面背景更协调。 */
   filter: brightness(0.95);
-}
-
-.chie-widget[data-theme='dark'] .chie-model-frame {
-  filter: brightness(0.88);
 }
 
 /* 坐姿/膝上像适配：对话框下移到头部上方附近（默认在 widget 顶部上方，
