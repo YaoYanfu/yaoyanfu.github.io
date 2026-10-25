@@ -168,10 +168,7 @@ export default function Home() {
       >
         <Sidebar t={t} />
 
-        <main
-          className={styles.main}
-          data-chie-safe-content={showChie ? 'true' : undefined}
-        >
+        <main className={styles.main}>
 
           {/* 1. About */}
           <section className={styles.section} id="about">

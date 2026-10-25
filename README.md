@@ -196,9 +196,8 @@ npm run build
 ## 项目结构
 
 ```
-mypage/
+yaoyanfu.github.io/
 ├── docusaurus.config.js              站点装配：导航、主题、插件、MASCOT_MODE
-├── ARCHITECTURE.md                   架构说明与已知技术债（本地分析文档，已被 .gitignore 忽略）
 ├── blog/                             博客文章、authors.yml、tags.yml
 ├── plugins/
 │   ├── blog-nav-plugin/              校验文章分类并生成侧边栏导航数据
@@ -209,10 +208,12 @@ mypage/
 │   │   └── LanguageToggle/           导航栏 EN / 中文切换
 │   ├── context/LanguageContext.js    语言状态与 t() 翻译函数
 │   ├── css/custom.css                全局设计令牌与主题覆盖
-│   ├── data/                         translations / projects / chieMascot / blogColumns 数据
-│   ├── lib/supabase.js               留言板 REST 客户端
-│   ├── pages/                        index、project、dashboard
+│   ├── data/                         translations / projects / research / updates / chieMascot / blogColumns 数据
+│   ├── lib/                          supabase.js（留言板 REST 客户端）、formatDate.js
+│   ├── pages/                        index、project、research、dashboard
 │   └── theme/                        Root、NavbarItem 与 BlogSidebar 扩展点
 └── static/
     └── img/                          头像、经历/获奖 Logo、博客配图、chie/ 精灵图
 ```
+
+构建产物输出到 `build/`，由 `.github/workflows/deploy.yml` 发布到 GitHub Pages。

@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 import {useLanguage} from '@site/src/context/LanguageContext';
 import {CHIE_ASSETS, CHIE_REACTIONS} from '@site/src/data/chieMascot';
@@ -31,10 +32,11 @@ const EXPRESSIONS = ['shy', 'alert', 'annoyed'];
 const SEATED_PARTS = ['chair', 'leg-left', 'leg-right', 'upper', 'knee'];
 
 function Sprite({asset, className}) {
+  const src = useBaseUrl(`img/chie/${CHIE_ASSETS[asset]}`);
   return (
     <img
       className={`chie-sprite ${className}`}
-      src={`/img/chie/${CHIE_ASSETS[asset]}`}
+      src={src}
       alt=""
       draggable="false"
       decoding="async"
