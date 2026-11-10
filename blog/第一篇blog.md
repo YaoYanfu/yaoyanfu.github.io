@@ -117,4 +117,6 @@ section: article
 
 >2026/06/01
 
+>于西安电子科技大学
+
 {/* truncate */}
