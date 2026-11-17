@@ -180,6 +180,7 @@ column: embodied-intelligence
 都会在构建时报错并指出具体是哪个文件；已登记但还没有文章的专栏，展开后显示「暂无文章」。
 侧边栏的展示规则（每个板块最新 5 篇 +「查看全部」、专栏两级展开、展开状态记在 `sessionStorage`）
 集中在 `src/theme/BlogSidebar/Content/navViewState.js`，分类校验在 `plugins/blog-nav-plugin/`。
+标签页（`src/theme/BlogTagsPostsPage/`）只列出该标签下的文章标题，点击标题进入正文，不在列表内展开全文。
 
 **新增页面**：在 `src/pages/<name>.js` 创建即可映射到 `/<name>`；使用 `@theme/Layout` 获得统一导航与页脚，
 局部样式放在相邻的 `*.module.css`，全局令牌才写入 `src/css/custom.css`。
@@ -212,7 +213,7 @@ yaoyanfu.github.io/
 │   ├── data/                         translations / projects / research / updates / chieMascot / blogColumns 数据
 │   ├── lib/                          supabase.js（留言板 REST 客户端）、formatDate.js
 │   ├── pages/                        index、project、research、dashboard
-│   └── theme/                        Root、NavbarItem 与 BlogSidebar 扩展点
+│   └── theme/                        Root、NavbarItem、BlogSidebar 与 BlogTagsPostsPage 扩展点
 └── static/
     └── img/                          头像、经历/获奖 Logo、博客配图、chie/ 精灵图
 ```

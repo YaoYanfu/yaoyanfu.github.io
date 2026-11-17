@@ -1,0 +1,63 @@
+/* 标签页的文章标题列表：只做轻量的分行与悬停反馈，不抢正文的视觉重心。 */
+
+.postList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--site-border-subtle);
+}
+
+.postItem {
+  border-bottom: 1px solid var(--site-border-subtle);
+}
+
+.postLink {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.1rem 0.25rem;
+  color: var(--site-text-primary);
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.postTitle {
+  font-family: var(--ifm-heading-font-family);
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.postArrow {
+  flex: none;
+  color: var(--site-text-muted);
+  font-size: 1rem;
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.postLink:hover,
+.postLink:focus-visible {
+  color: var(--ifm-link-color);
+  text-decoration: none;
+  transform: translateX(0.35rem);
+}
+
+.postLink:hover .postArrow,
+.postLink:focus-visible .postArrow {
+  color: var(--ifm-link-color);
+  transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .postTitle {
+    font-size: 1.1rem;
+  }
+
+  .postLink {
+    padding: 0.9rem 0.1rem;
+  }
+}
