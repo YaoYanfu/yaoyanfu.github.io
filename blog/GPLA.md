@@ -1,5 +1,5 @@
 ---
-title: General-Purpose Learning Agents: From Models to Agents That Learn
+title: "General-Purpose Learning Agents: From Models to Agents That Learn"
 authors: [yves]
 tags: [agent, embodied ai, learning, memory]
 date: 2026-11-17

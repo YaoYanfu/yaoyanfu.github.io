@@ -13,3 +13,22 @@
   permalink: /record
   description: 记录相关文章
 
+agent:
+  label: agent
+  permalink: /agent
+  description: everything about agent.
+
+embodied ai:
+  label: embodied ai
+  permalink: /embodied-ai
+  description: everything about embodied ai.
+
+learning:
+  label: learning
+  permalink: /learning
+  description: machine learning
+
+memory:
+  label: memory
+  permalink: /memory
+  description: everything about memory.
